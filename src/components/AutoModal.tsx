@@ -5,6 +5,7 @@ import useDetectClose from '../hook/useDetectClose'
 const AutoModal = (props: any) => {
   const dropDownRef = useRef()
   const [isOpen, setIsOpen] = useDetectClose(dropDownRef, false) //커스텀훅
+  console.log(props)
   return (
     <Container>
       <Background
@@ -14,6 +15,7 @@ const AutoModal = (props: any) => {
         <XboxWrap onClick={() => props.closeModal(false)}>
           <div style={{ width: '40px' }}>{<Xbox />}</div>
         </XboxWrap>
+        <div style={{ fontSize: '30px' }}>{props.el}번째아이템</div>
         <div>
           <div style={{ textAlign: 'right' }}>
             <Button
@@ -67,8 +69,8 @@ const ModalBlock = styled.div<{ ref?: any }>`
   padding: 1.5rem;
   background-color: white;
   color: black;
-  width: 500px;
-  height: 300px;
+  width: 800px;
+  height: 600px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
