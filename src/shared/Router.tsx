@@ -4,6 +4,7 @@ import Home from '../page/Home'
 import { getUser } from '../util/localstorage'
 import Login from '../page/Login'
 import Join from '../page/Join'
+import CreateForm from '../page/CreateForm'
 const Router = () => {
   const userInfo = getUser()
   return (
@@ -13,6 +14,7 @@ const Router = () => {
           <Route path="/" element={<Home authenticated={userInfo} />} />
           <Route path="/login" element={<Login />} />
           <Route path="/Join" element={<Join />} />
+          <Route path="/CreateForm" element={<CreateForm />} />
         </Route>
       </Routes>
     </BrowserRouter>
