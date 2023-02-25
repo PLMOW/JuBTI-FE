@@ -76,7 +76,7 @@ const Img = styled.img`
   object-fit: cover;
 `
 const CotentWrap = styled.div`
-  width: 1000px;
+  width: 850px;
   margin: 0 auto;
   height: auto;
 `
