@@ -5,6 +5,9 @@ import { getUser } from '../util/localstorage'
 import Login from '../page/Login'
 import Join from '../page/Join'
 import CreateForm from '../page/CreateForm'
+import MainPage from '../page/MainPage'
+import Detail from '../page/Detail'
+
 const Router = () => {
   const userInfo = getUser()
   return (
@@ -15,6 +18,10 @@ const Router = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/Join" element={<Join />} />
           <Route path="/CreateForm" element={<CreateForm />} />
+          <Route path="/join" element={<Join />} />
+          <Route path="/mainpage" element={<MainPage />} />
+          <Route path="/detail/:id" element={<Detail />} />
+
         </Route>
       </Routes>
     </BrowserRouter>
