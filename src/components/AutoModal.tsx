@@ -5,7 +5,6 @@ import useDetectClose from '../hook/useDetectClose'
 const AutoModal = (props: any) => {
   const dropDownRef = useRef()
   const [isOpen, setIsOpen] = useDetectClose(dropDownRef, false) //커스텀훅
-  console.log(props)
   return (
     <Container>
       <Background
@@ -13,9 +12,24 @@ const AutoModal = (props: any) => {
       ></Background>
       <ModalBlock ref={dropDownRef}>
         <XboxWrap onClick={() => props.closeModal(false)}>
-          <div style={{ width: '40px' }}>{<Xbox />}</div>
+          <span style={{ width: '40px' }}>{<Xbox />}</span>
         </XboxWrap>
-        <div style={{ fontSize: '30px' }}>{props.el}번째아이템</div>
+        <div style={{ fontSize: '30px' }}>{props.el}</div>
+        <ImageWrap>
+          <div>
+            <img
+              src="https://lesprit.kr/img_goods/1535021786.jpg"
+              alt="주류 4"
+              style={{ width: '250px', height: '250px', objectFit: 'cover' }}
+            ></img>
+          </div>
+          <BoxMent>축하합니다 당신은 *** 주류입니다.</BoxMent>
+          주정의 생산부터 숙성에 이르기까지 전통적인 방식을 고수하고 있어
+          전통적인 느낌을 주는 위스키이다. 셰리 오크통을 사용하는 더 맥켈란과
+          달리 버번 캐스크 원액을 주로 사용하여 화려한 오크향이 특징이다. 싱글
+          몰트 위스키 특유의 강하고 쏘는 듯한 맛을 지니고 있는 위스키지만,
+          부드러운 느낌 또한 가지고 있어 상당히 대중적인 싱글 몰트 위스키이다.
+        </ImageWrap>
         <div>
           <div style={{ textAlign: 'right' }}>
             <Button
@@ -34,11 +48,12 @@ const AutoModal = (props: any) => {
     </Container>
   )
 }
-const XboxWrap = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: end;
-  width: 100%;
+const XboxWrap = styled.span`
+  cursor: pointer;
+  position: absolute;
+  z-index: 99;
+  right: 28px;
+  width: 35px;
 `
 const Container = styled.div`
   position: fixed;
@@ -57,7 +72,7 @@ const Background = styled.div`
   position: fixed;
   width: 100%;
   height: 100%;
-  background-color: rgb(221, 221, 221);
+  background-color: black;
   opacity: 0.8;
 `
 const ModalBlock = styled.div<{ ref?: any }>`
@@ -98,5 +113,16 @@ const Button = styled.button<{
   &:active {
     filter: brightness(50%);
   }
+`
+const BoxMent = styled.div`
+  margin: 35px 0 25px;
+  font-size: 20px;
+  font-family: 'Pretendard-Black';
+`
+const ImageWrap = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
 `
 export default AutoModal
