@@ -26,7 +26,7 @@ function CreateForm() {
       return alert('모든 항목을 입력해주세요.');
     }
 
-    // axios 활용 서버에 전송하기
+    // axios 활용 서버에 전송 하기
     axios
     .post(
       ``,
