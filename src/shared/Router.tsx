@@ -7,6 +7,7 @@ import Join from '../page/Join'
 import CreateForm from '../page/CreateForm'
 import MainPage from '../page/MainPage'
 import Detail from '../page/Detail'
+import CreateForm from '../page/CreateForm'
 const Router = () => {
   const userInfo = getUser()
   return (

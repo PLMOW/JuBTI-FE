@@ -18,6 +18,7 @@ function CreateForm() {
   const onClickHandler = (e: any) => {
     e.preventDefault();
 
+
     console.log(data.Image);
     console.log(data.Title);
     console.log(data.Mbti);
@@ -39,7 +40,7 @@ function CreateForm() {
     if (data.Content.trim() === '' ) {
       return alert('레시피를 입력해주세요.');
     }
-     
+    
 
     // axios 활용 서버에 전송 하기
     axios
@@ -61,8 +62,7 @@ function CreateForm() {
         navigate('/CreateForm');
       }
     })
-    .catch((error) => {
-      console.log(error)
+    .catch((err) => {
       alert('작성에 실패하였습니다.');
       navigate('/CreateForm');
     });
@@ -79,6 +79,7 @@ function CreateForm() {
     });
 
   }
+
 
   // 이벤트 핸들러
   const changhandler = (e : any) => {
@@ -127,7 +128,6 @@ function CreateForm() {
   const imgHandlerClick = (event :any) => {
     event.target.value = null;
   };
-
 
 
 
@@ -246,6 +246,13 @@ const TitleForm = styled.div`
   margin: 20px 0px;
 `
 const MbtiForm = styled.div`
+  overflow: hidden;
+  margin-bottom: 57px;
+  font-size: 35px;
+  font-weight: 800;
+  color: #222222;
+  line-height: 36px;
+  word-break: break-all;
   margin: 20px 0px;
 `
 const InputBox = styled.input`
@@ -255,6 +262,10 @@ const InputBox = styled.input`
   padding-left: 15px;
   height: 50px;
   font-size: 20px;
+`
+
+const MbtiForm = styled.div`
+  margin: 20px 0px;
 `
 
 const MaterialForm = styled.select`
@@ -268,6 +279,8 @@ const MaterialForm = styled.select`
   border-bottom: 2px solid #000;
   margin: 20px 0px;
   padding-left: 10px;
+  margin: 20px 5px;
+
 `
 const ContentForm = styled.div`
   border-Top: 1px solid #e0e0e0;
