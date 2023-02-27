@@ -55,7 +55,7 @@ function MainPage() {
   const fetchHandler = async () => {
     axios.get('/api/recipe')
     const res = await axios
-      .get(`http://3.36.29.101/api/recipe`, {})
+      .get(`http://3.36.29.101/api/recipe`)
       .then((res) => {
         console.log(res)
       })
