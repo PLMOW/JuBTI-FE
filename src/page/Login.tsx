@@ -4,7 +4,8 @@ import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { setCookie } from '../util/cookie'
 import jwt_decode from 'jwt-decode'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { todoUpdateLogin } from '../redux/modules/login'
 function Login() {
   const [isId, setId] = useState('')
   const [isPassword, setPassword] = useState('')
@@ -26,6 +27,7 @@ function Login() {
         const decodedUserInfo = jwt_decode(token) // 토큰 decode
         console.log('decode', decodedUserInfo)
         localStorage.setItem('userInfo', JSON.stringify(decodedUserInfo))
+        dispatch(todoUpdateLogin({ login: true }))
         alert('로그인완료')
         navigate('/')
       })
@@ -33,8 +35,12 @@ function Login() {
         console.log(error)
         alert(error.response.data.message)
       })
-    // dispatch(userCreate({ login: true }))
   }
+  const login = useSelector((state: any) => {
+    return state.login.login
+  })
+  console.log('login :', login)
+
   return (
     <>
       <CenterWrapper>
@@ -43,13 +49,13 @@ function Login() {
         <Input
           type="text"
           value={isId}
-          onChange={(e) => setId(e.target.value)}
+          onChange={(e: any) => setId(e.target.value)}
         />
         <Label>비밀번호</Label>
         <Input
           type="password"
           value={isPassword}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e: any) => setPassword(e.target.value)}
         />
         <ButtonWrap>
           <Button
@@ -111,13 +117,14 @@ export const H1 = styled.div`
   text-align: center;
   font-size: 25px;
 `
-export const Input = styled.input`
+export const Input = styled.input<any>`
   width: ${(props) => (props.width ? props.width : '100%')};
   height: ${(props) => (props.height ? props.height : '50px')};
   border: 2px solid #000;
   border-radius: 15px;
   padding-left: 15px;
   font-size: 20px;
+  font-size: ${(props) => (props.fontSize ? props.fontSize : '20px')};
 `
 export const ButtonWrap = styled.div`
   margin-top: 30px;

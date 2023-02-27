@@ -44,25 +44,25 @@ function Join() {
         <Input
           type="text"
           value={isId}
-          onChange={(e) => setId(e.target.value)}
+          onChange={(e: any) => setId(e.target.value)}
         />
         <Label>닉네임</Label>
         <Input
           type="text"
           value={isNickName}
-          onChange={(e) => setNickName(e.target.value)}
+          onChange={(e: any) => setNickName(e.target.value)}
         />
         <Label>비밀번호</Label>
         <Input
           type="password"
           value={isPassword}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e: any) => setPassword(e.target.value)}
         />
         <Label>비밀번호확인</Label>
         <Input
           type="password"
           value={isPasswordCheck}
-          onChange={(e) => setPasswordCheck(e.target.value)}
+          onChange={(e: any) => setPasswordCheck(e.target.value)}
         />
         <Label>MBTI</Label>
         <SelectBoxs
