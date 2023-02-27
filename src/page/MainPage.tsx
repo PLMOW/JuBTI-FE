@@ -3,16 +3,19 @@ import styled from 'styled-components'
 import AutoModal from '../components/AutoModal'
 import { Pagination } from '@mantine/core'
 import { TAKE } from '../constants/products/products'
+import { Link, useLocation } from 'react-router-dom'
+import { Button } from './Login'
 function MainPage() {
+  const location = useLocation()
   const [isAutoModal, setAutoModal] = useState<boolean>(false)
-
   const [activePage, setPage] = useState(1)
   const [isNum, setNum] = useState<any>(null)
   const [total, setTotal] = useState<number>(0)
   const [products, setProducts] = useState<any>([])
-  const onClickModal = (el: number) => {
+
+  const onClickModal = () => {
     setAutoModal(true)
-    setNum(el)
+    // setNum(el)
   }
   useEffect(() => {
     const skip = TAKE * (activePage - 1)
@@ -41,15 +44,30 @@ function MainPage() {
   return (
     <div style={{ marginTop: '150px' }}>
       <CotentWrap>
+        <ButtonWrap>
+          <Button
+            width="150px"
+            fontWeight="600"
+            bgColor="#000"
+            border="3px solid #fff"
+            color="white"
+            height="50px"
+            onClick={() => onClickModal()}
+          >
+            내Mbti확인하기
+          </Button>
+        </ButtonWrap>
         {products &&
           products?.map((el: number, idx: number) => {
             return (
-              <ElementBox key={idx} onClick={() => onClickModal(el)}>
-                <Img
-                  src="https://lesprit.kr/img_goods/1535021786.jpg"
-                  alt={`주류 ${el}`}
-                />
-                <div>술이름 {el}</div>
+              <ElementBox key={idx}>
+                <Link to={`/detail/${el}`} state={el}>
+                  <Img
+                    src="https://lesprit.kr/img_goods/1535021786.jpg"
+                    alt={`주류 ${el}`}
+                  />
+                  <div>술이름 {el}</div>
+                </Link>
               </ElementBox>
             )
           })}
@@ -76,9 +94,14 @@ const Img = styled.img`
   object-fit: cover;
 `
 const CotentWrap = styled.div`
-  width: 850px;
+  width: 982px;
   margin: 0 auto;
   height: auto;
+`
+const ButtonWrap = styled.div`
+  margin-bottom: 40px;
+  display: flex;
+  justify-content: end;
 `
 const ElementBox = styled.div`
   overflow: hidden;

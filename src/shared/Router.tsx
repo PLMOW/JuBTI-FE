@@ -7,21 +7,20 @@ import Join from '../page/Join'
 import CreateForm from '../page/CreateForm'
 import MainPage from '../page/MainPage'
 import Detail from '../page/Detail'
-
 const Router = () => {
   const userInfo = getUser()
   return (
     <BrowserRouter>
       <Routes>
         <Route element={<TopNav />}>
-          <Route path="/" element={<Home authenticated={userInfo} />} />
+          {/* <Route path="/" element={<MainPage authenticated={userInfo} />} /> */}
+          <Route path="/" element={<MainPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/Join" element={<Join />} />
-          <Route path="/CreateForm" element={<CreateForm />} />
           <Route path="/join" element={<Join />} />
           <Route path="/mainpage" element={<MainPage />} />
           <Route path="/detail/:id" element={<Detail />} />
-
+          <Route path="/createform" element={<CreateForm />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { setCookie } from '../util/cookie'
-// import jwt_decode from 'jwt-decode'
+import jwt_decode from 'jwt-decode'
 import { useDispatch } from 'react-redux'
 function Login() {
   const [isId, setId] = useState('')
@@ -12,20 +12,20 @@ function Login() {
   const dispatch = useDispatch()
   const LoginHandler = async () => {
     const res = await axios
-      .post(
-        `http://3.38.191.164/login`,
-        {
-          id: isId,
-          password: isPassword,
-        },
-        { withCredentials: true }
-      )
+      .post(`http://3.36.29.101/api/auth/login`, {
+        username: isId,
+        password: isPassword,
+      })
       .then((res) => {
-        const token = res.data.token
-        setCookie('accessJwtToken', token) // 쿠키에저장
-        // const decodedUserInfo = jwt_decode(token) // 토큰 decode
-        // localStorage.setItem('userInfo', JSON.stringify(decodedUserInfo))
+        // res.headers.get('Authorization')
+        let target = res.headers.authorization
+        let token = target.split(' ')[1]
+        // const token = res.data.headers.to
 
+        setCookie('accessJwtToken', token) // 쿠키에저장
+        const decodedUserInfo = jwt_decode(token) // 토큰 decode
+        console.log('decode', decodedUserInfo)
+        localStorage.setItem('userInfo', JSON.stringify(decodedUserInfo))
         alert('로그인완료')
         navigate('/')
       })
@@ -98,6 +98,7 @@ export const CenterWrapper = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   font-family: 'LINESeedKR-Bd';
+  width: 470px;
 `
 export const Label = styled.div`
   margin: 17px 0px 10px;
@@ -111,11 +112,11 @@ export const H1 = styled.div`
   font-size: 25px;
 `
 export const Input = styled.input`
-  width: 100%;
+  width: ${(props) => (props.width ? props.width : '100%')};
+  height: ${(props) => (props.height ? props.height : '50px')};
   border: 2px solid #000;
   border-radius: 15px;
   padding-left: 15px;
-  height: 50px;
   font-size: 20px;
 `
 export const ButtonWrap = styled.div`

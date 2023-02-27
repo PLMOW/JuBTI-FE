@@ -1,10 +1,11 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
+import { Input } from './Login'
 
 function Detail() {
   const prams = useParams()
-  console.log('prams :', prams)
+  const data = [1, 2, 3, 4, 5, 6, 7, 8]
   return (
     <CenterWrapperDetail>
       {/* <h1 style={{ fontSize: '30px', marginBottom: '10px' }}>
@@ -34,17 +35,19 @@ function Detail() {
             borderBottom: '1px solid #e0e0e0',
           }}
         >
-          Comments
+          Comments ({data.length})
         </CommnetsInner>
-        {[1, 2, 3, 4, 5, 6, 7, 8].map((el: number) => {
-          return <div>{el}</div>
+        {data?.map((el: number) => {
+          return <Comment key={el}>김영현 : 글렌피딕을 좋아합니다.</Comment>
         })}
+        <Input width={'100px'} height={'40px'} type="text" placeholder="이름" />
+        <Input width={'250px'} height={'40px'} type="text" placeholder="내용" />
       </CommnetsWrap>
     </CenterWrapperDetail>
   )
 }
 const CenterWrapperDetail = styled.div`
-  width: 700px;
+  width: 800px;
   height: auto;
   margin: 150px auto;
 `
@@ -89,5 +92,8 @@ const ContentTopName = styled(ContentName)`
   color: #222222;
   line-height: 36px;
   word-break: break-all;
+`
+const Comment = styled.div`
+  font-size: 16px;
 `
 export default Detail
