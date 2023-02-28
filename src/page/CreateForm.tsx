@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
@@ -7,25 +7,31 @@ import styled from 'styled-components'
 function CreateForm() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const [isImage, setImage] = useState({
+    image_file: "",
+    preview_URL: "",
+  });
+
+  let inputRef;
+
   const [data, setData] = useState({
-    Image: '',
     Title: '',
     Mbti: '',
     Material: '',
     Content: '',
   })
 
-  const onClickHandler = (e: any) => {
-    e.preventDefault()
+  const onClickHandler = async(e: any) => {
+    e.preventDefault();
 
-    console.log(data.Image)
-    console.log(data.Title)
-    console.log(data.Mbti)
-    console.log(data.Material)
-    console.log(data.Content)
+    // console.log(isImage.image_file);
+    // console.log(data.Title);
+    // console.log(data.Mbti);
+    // console.log(data.Material);
+    // console.log(data.Content);
 
-    if (data.Image.trim() === '') {
-      return alert('이미지를 넣어주세요')
+    if (isImage.image_file === '' ) {
+      return alert('이미지를 넣어주세요.');
     }
     if (data.Title.trim() === '') {
       return alert('제목을 입력해주세요.')
@@ -40,32 +46,53 @@ function CreateForm() {
       return alert('레시피를 입력해주세요.')
     }
 
+    const formData = new FormData()
+    formData.append('file', isImage.image_file);
+    formData.append('title', data.Title);
+    formData.append('mbti', data.Mbti);
+    formData.append('material', data.Material);
+    formData.append('content', data.Content);
+    
+    for (let key of formData.keys()) {
+      console.log(key, ":", formData.get(key));
+    }
+    
+
     // axios 활용 서버에 전송 하기
     axios
-      .post(`서버url`, {
-        Image: data.Image,
-        Title: data.Title,
-        Mbti: data.Mbti,
-        Material: data.Material,
-        Content: data.Content,
-      })
-      .then((res) => {
-        if (res.data.success) {
-          alert('레시피가 작성되었습니다.')
-          navigate('/detail/:id')
-        } else {
-          alert('작성에 실패하였습니다.')
-          navigate('/CreateForm')
-        }
-      })
-      .catch((err) => {
-        alert('작성에 실패하였습니다.')
-        navigate('/CreateForm')
-      })
+    .post(
+      `http://3.36.29.101/api/recipe`,  formData ,
+       {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "Access-Control-Allow-Origin": "*",
+        },
+      // Image: formData,
+      // Title: data.Title,
+      // Mbti: data.Mbti,
+      // Material: data.Material,
+      // Content: data.Content,
+    })
+    .then((res) => {
+      if (res.data.success) {
+        alert('레시피가 작성되었습니다.');
+        navigate('/detail/:id');
+      } else {
+        alert('작성에 실패하였습니다.');
+        navigate('/createform');
+      }
+    })
+    .catch((err) => {
+      alert('작성에 실패하였습니다.');
+      navigate('/createform');
+    });
 
     // 데이터 내용 초기화
+    setImage({
+      image_file: "",
+      preview_URL: "",
+    });
     setData({
-      Image: '',
       Title: '',
       Mbti: '',
       Material: '',
@@ -79,61 +106,77 @@ function CreateForm() {
     setData({ ...data, [name]: value })
 
     // 엔터('\n') 개수를 세서 textareaHeight에 저장
-    setTextareaHeight(e.target.value.split('\n').length - 1)
-  }
+    setTextareaHeight(e.target.value.split('\n').length - 1);
+    e.preventDefault();
+  };
 
   // ContentTextarea 컨텐츠 확장기능
   // 줄 수를 계산해서 저장할 변수
   const [textareaHeight, setTextareaHeight] = useState(0)
 
-  // 이미지 미리보기 저장할 변수
-  const [previewImg, setPreviewImg] = useState<any>([])
+  // // 이미지 미리보기 저장할 변수
+  // const [previewImg, setPreviewImg ] = useState<any>([]);
 
   // 이미지 업로드 input의 onChange
-  const imgHandler = (e: any) => {
-    e.preventDefault()
-    const { name, value } = e.target
-
-    // FileReader API로 이미지 인식
-    let reader = new FileReader()
-    const file = e.target.files[0]
-    console.log(e.target.files)
-
-    if (file) {
-      reader.readAsDataURL(file) // 1. reader에게 file을 먼저 읽히고
-
-      setData({ ...data, [name]: value })
+  const imgHandler = (e : any) => {
+    if(e.target.files[0]){
+      // 새로운 이미지를 올리면 createObjectURL()을 통해 생성한 기존 URL을 폐기
+      URL.revokeObjectURL(isImage.preview_URL);
+      const preview_URL = URL.createObjectURL(e.target.files[0]);
+      setImage(() => (
+        {
+          image_file: e.target.files[0],
+          preview_URL: preview_URL
+        }
+      ))
     }
+  };
 
-    // 2. 사진 올리고 나서 처리하는 event
-    reader.onloadend = () => {
-      const previewImgUrl = reader.result || null
-      if (previewImgUrl) {
-        setPreviewImg([...previewImg, previewImgUrl])
-      }
-      e.target.value = '' // 3. 같은 파일을 올리면 인지못해서 여기서 초기화
-    } // 4. 비동기적으로 load가 끝나면 state에 저장
-  }
+  // useEffect(()=> {
+  //   // 컴포넌트가 언마운트되면 createObjectURL()을 통해 생성한 기존 URL을 폐기
+  //   return () => {
+  //     URL.revokeObjectURL(isImage.preview_URL)
+  //   }
+  // }, [])
 
-  const imgHandlerClick = (event: any) => {
-    event.target.value = null
-  }
+
+  //   const { name, value } = e.target;
+
+  //   // FileReader API로 이미지 인식
+  //   let reader = new FileReader();
+  //   const file = e.target.files[0];
+  //   console.log(e.target.files);
+
+  //   if(file) {
+  //     reader.readAsDataURL(file);  // 1. reader에게 file을 먼저 읽히고
+      
+  //     setData({ ...data, [name]: value});
+  //   }
+
+  //   // 2. 사진 올리고 나서 처리하는 event
+  //   reader.onloadend = () => {
+  //     const previewImgUrl = reader.result || null
+  //     if(previewImgUrl) {
+  //       setPreviewImg([...previewImg, previewImgUrl])
+  //     }
+  //     e.target.value = ''; // 3. 같은 파일을 올리면 인지못해서 여기서 초기화
+  //   }; // 4. 비동기적으로 load가 끝나면 state에 저장
+  // };
 
   return (
     <CreateWrapper>
       <Forms onSubmit={onClickHandler}>
-        <ImgForm htmlFor="profileImg">
-          <Img src={previewImg} alt="이미지추가" />
-          <ImgInput
+        <ImgForm> 
+          <Img  alt="이미지추가" src={isImage.preview_URL} /> 
+          <ImgInput 
             type="file"
             multiple
             name="Image"
             accept="image/*"
             onChange={imgHandler}
-            onClick={imgHandlerClick}
-            id="profileImg"
+            onClick={(e :any) => e.target.value = null}
+            ref={refParam => inputRef = refParam}
           />
-          {/* {previewImg && <img src={previewImg} />} */}
         </ImgForm>
         <CreateFormWrapIn>
           <TitleForm>
@@ -147,7 +190,7 @@ function CreateForm() {
           <MbtiForm>
             <InputBox
               type="text"
-              name="Mbit"
+              name="Mbti"
               onChange={changhandler}
               placeholder="mbti를 적어주세요!"
             />
@@ -156,11 +199,11 @@ function CreateForm() {
             <option value="" hidden>
               주 재료를골라주세요!
             </option>
-            <option value="1">사케</option>
-            <option value="2">와인</option>
-            <option value="3">위스키</option>
-            <option value="4">막걸리</option>
-            <option value="5">기타</option>
+            <option value="사케">사케</option>
+            <option value="와인">와인</option>
+            <option value="위스키">위스키</option>
+            <option value="막걸리">막걸리</option>
+            <option value="기타">기타</option>
           </MaterialForm>
         </CreateFormWrapIn>
         <ContentForm>
@@ -246,7 +289,6 @@ const InputBox = styled.input`
   height: 50px;
   font-size: 20px;
 `
-
 const MaterialForm = styled.select`
   width: 100%;
   height: 35px;
