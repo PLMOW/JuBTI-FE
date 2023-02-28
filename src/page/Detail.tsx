@@ -1,25 +1,47 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import ChatBox from '../asset/svg/ChatBox'
 import Heart from '../asset/svg/Heart'
+import Xmark from '../asset/svg/Xmark'
 import { getCookie } from '../util/cookie'
 import { getUser } from '../util/localstorage'
 import { Button, Input } from './Login'
 // import { Cookies } from 'react-cookie'
 
 function Detail() {
-  const data = [1]
   const [isComment, setComment] = useState('')
   const userInfo = getUser()
   const params = useParams()
   const [isData, setData] = useState<any>([])
+  const [isHearts, setHearts] = useState(false)
   let token = getCookie('accessToken') // 쿠키에저장
 
   axios.defaults.baseURL = 'http://3.36.29.101'
+  const LikeHandlerBtn = useCallback(() => {
+    axios
+      .post(
+        `/api/recipe/${params?.id}`,
+        {},
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      )
+      .then((res) => {
+        if (res.data.msg === '좋아요') {
+          setHearts((prev) => !prev)
+        }
+      })
+  }, [])
+
+  useEffect(() => {
+    LikeHandlerBtn()
+  }, [LikeHandlerBtn])
   const onSubmitHandler = async () => {
-    const res = axios
+    const res = await axios
       .post(
         `/api/recipe/${params?.id}/comment`,
         {
@@ -39,7 +61,21 @@ function Detail() {
         alert(error.response.data.message)
       })
   }
-
+  const DeleteHandler = async (commentId: any) => {
+    console.log(commentId)
+    if (window.confirm('삭제하시겠습니까?')) {
+      await axios
+        .delete(`/api/recipe/comment/${commentId}`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          console.log(res.data)
+          alert('삭제완료')
+        })
+    }
+  }
   useEffect(() => {
     axios
       .get(`/api/recipe/${params?.id}`, {
@@ -73,8 +109,11 @@ function Detail() {
               }}
             >
               <span>Like</span>
-              <span style={{ width: '20px', display: 'flex' }}>
-                <Heart />
+              <span
+                style={{ width: '20px', display: 'flex', cursor: 'pointer' }}
+                onClick={LikeHandlerBtn}
+              >
+                {isHearts ? <>♡</> : <>♥</>}
               </span>{' '}
               :{'  '}
               {isData.recipeLike}
@@ -94,27 +133,37 @@ function Detail() {
       <CommnetsWrap>
         <CommnetsInner
           style={{
-            marginBottom: '24px',
+            marginBottom: '20 px',
             paddingBottom: '8px',
             borderBottom: '1px solid #e0e0e0',
           }}
         >
           Comments ({isData?.comments?.length})
         </CommnetsInner>
-        <div style={{ color: '#909090', fontSize: '20px' }}>id/이름/내용</div>
         {isData &&
           isData?.comments?.map((el: any) => {
             return (
-              <Comment key={el}>
+              <Comment key={el.id}>
                 {el.user}님
                 <span style={{ width: '25px', display: 'inline-block' }}>
                   <ChatBox />
                 </span>
                 : {el.comments}
+                <span
+                  style={{
+                    marginLeft: '10px',
+                    width: '25px',
+                    display: 'inline-block',
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => DeleteHandler(el.id)}
+                >
+                  <Xmark />
+                </span>
               </Comment>
             )
           })}
-        <div style={{ display: 'flex', gap: '8px' }}>
+        <div style={{ display: 'flex', gap: '8px', marginTop: '30px' }}>
           <Input
             width={'250px'}
             height={'30px'}
@@ -191,7 +240,7 @@ const ContentTopName = styled(ContentName)`
 `
 const Comment = styled.div`
   font-size: 16px;
-  padding: 15px;
+  padding: 10px;
   display: flex;
   align-items: center;
 `
