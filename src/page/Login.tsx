@@ -24,7 +24,6 @@ function Login() {
         // const token = res.data.headers.to
 
         setCookie('accessToken', res.headers.authorization) // 쿠키에저장
-        setCookie('accessJwtToken', token) // 쿠키에저장
         const decodedUserInfo = jwt_decode(token)
         console.log('decode', decodedUserInfo)
         localStorage.setItem('userInfo', JSON.stringify(decodedUserInfo))

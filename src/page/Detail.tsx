@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { getCookie } from '../util/cookie'
@@ -8,8 +8,8 @@ import { Button, Input } from './Login'
 // import { Cookies } from 'react-cookie'
 
 function Detail() {
-  const [isComment, setComment] = useState('')
   const data = [1]
+  const [isComment, setComment] = useState('')
   const userInfo = getUser()
   const params = useParams()
   let token = getCookie('accessToken') // 쿠키에저장
@@ -45,54 +45,30 @@ function Detail() {
   // axios.defaults.withCredentials = true
   console.log('token : ', token)
   const onSubmitHandler = async () => {
-    const res = axios.post(
-      `/api/recipe/${params?.id}/comment`,
-      {
-        comments: isComment,
-      },
-      {
-        headers: {
-          Authorization: token,
-          // 'Content-Type': 'Application/JSON',
-          // 'Access-Control-Allow-Credentials': 'true',
-          // 'Access-Control-Allow-Origin': '*',
-          // 'Access-Control-Expose-Headers': '*',
+    const res = axios
+      .post(
+        `/api/recipe/${params?.id}/comment`,
+        {
+          comments: isComment,
         },
-      }
-    )
-    // .then((res) => {
-    //   // res.headers.get('Authorization')
-    //   axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-    //   console.log(res)
-    //   // const token = res.data.headers.to
-    //   alert('작성완료')
-    // })
-    console.log(res)
-    // const res = await axios
-    //   .post(
-    //     `/api/recipe/${params?.id}/comment`,
-    //     {
-    //       comments: isComment,
-    //     }
-    //     // {
-    //     //   headers: {
-    //     //     Authorization: `${token}`,
-    //     //     'Content-Type': 'application/json',
-    //     //   },
-    //     // }
-    //   )
-    //   .then((res) => {
-    //     // res.headers.get('Authorization')
-    //     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
-    //     console.log(res)
-    //     // const token = res.data.headers.to
-    //     alert('작성완료')
-    //   })
-    //   .catch((error) => {
-    //     console.log(error)
-    //     alert(error.response.data.message)
-    //   })
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res)
+        alert('작성완료')
+      })
+      .catch((error) => {
+        console.log(error)
+        alert(error.response.data.message)
+      })
   }
+  useEffect(() => {
+    console.log()
+  }, [])
   return (
     <CenterWrapperDetail>
       {/* <h1 style={{ fontSize: '30px', marginBottom: '10px' }}>
