@@ -2,6 +2,8 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
+import ChatBox from '../asset/svg/ChatBox'
+import Heart from '../asset/svg/Heart'
 import { getCookie } from '../util/cookie'
 import { getUser } from '../util/localstorage'
 import { Button, Input } from './Login'
@@ -65,6 +67,21 @@ function Detail() {
             </ContentName>
             <div
               style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                marginBottom: '15px',
+              }}
+            >
+              <span>Like</span>
+              <span style={{ width: '20px', display: 'flex' }}>
+                <Heart />
+              </span>{' '}
+              :{'  '}
+              {isData.recipeLike}
+            </div>
+
+            <div
+              style={{
                 borderTop: '1px solid #e0e0e0',
                 padding: '20px 0px',
               }}
@@ -82,12 +99,21 @@ function Detail() {
             borderBottom: '1px solid #e0e0e0',
           }}
         >
-          Comments ({data.length})
+          Comments ({isData?.comments?.length})
         </CommnetsInner>
         <div style={{ color: '#909090', fontSize: '20px' }}>id/이름/내용</div>
-        {data?.map((el: number) => {
-          return <Comment key={el}>1/김영현/글렌피딕을 좋아합니다.</Comment>
-        })}
+        {isData &&
+          isData?.comments?.map((el: any) => {
+            return (
+              <Comment key={el}>
+                {el.user}님
+                <span style={{ width: '25px', display: 'inline-block' }}>
+                  <ChatBox />
+                </span>
+                : {el.comments}
+              </Comment>
+            )
+          })}
         <div style={{ display: 'flex', gap: '8px' }}>
           <Input
             width={'250px'}
@@ -165,6 +191,8 @@ const ContentTopName = styled(ContentName)`
 `
 const Comment = styled.div`
   font-size: 16px;
-  padding: 5px;
+  padding: 15px;
+  display: flex;
+  align-items: center;
 `
 export default Detail

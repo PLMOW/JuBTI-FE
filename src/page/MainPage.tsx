@@ -28,8 +28,8 @@ function MainPage() {
     console.log(skip, skip + TAKE)
     axios
       // .get(`http://3.36.29.101/api/recipe`, {
-      .get(`http://3.36.29.101/api/recipe`, {
-        // .get(`http://3.36.29.101/api/recipe/${skip}/${skip + TAKE}`, {
+      // .get(`http://3.36.29.101/api/recipe`, {
+      .get(`http://3.36.29.101/api/recipe/${skip + 1}/${skip + TAKE}`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -50,19 +50,6 @@ function MainPage() {
   const login = useSelector((state: any) => {
     return state?.login?.login
   })
-  // const fetchHandler = async () => {
-  //   const res = await axios
-  //     .get(`http://3.36.29.101/api/recipe`, {
-  //       withCredentials: true,
-  //     })
-  //     .then((res) => {
-  //       console.log(res.data)
-  //       setProducts(res.data)
-  //     })
-  //     .catch((error) => {
-  //       console.log(error)
-  //     })
-  // }
   return (
     <div style={{ marginTop: '150px' }}>
       <CotentWrap>
