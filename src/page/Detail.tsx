@@ -14,36 +14,7 @@ function Detail() {
   const params = useParams()
   let token = getCookie('accessToken') // 쿠키에저장
 
-  // const cookie = new Cookies()
-  // const onSubmitHandler = async () => {
-  //   console.log('token  : ', token)
-  //   console.log('params?.id  : ', params?.id)
-  //   console.log('isComment  : ', isComment)
-
-  //   // const res = await axios({
-  //   //   method: 'POST',
-  //   //   url: `http://3.36.29.101/api/recipe/${params?.id}/comment`,
-  //   //   data: { comments: isComment },
-  //   //   headers: {
-  //   //     'Content-Type': 'application/json',
-  //   //     Authorization: token,
-  //   //   },
-  //   // })
-  //   // console.log(res)
-  //   // .then((res) => {
-  //   //   // res.headers.get('Authorization')
-  //   //   console.log(res)
-  //   //   // const token = res.data.headers.to
-  //   //   alert('작성완료')
-  //   // })
-  //   // .catch((error) => {
-  //   //   console.log(error)
-  //   //   alert(error.response.data.message)
-  //   // })
-  // }
   axios.defaults.baseURL = 'http://3.36.29.101'
-  // axios.defaults.withCredentials = true
-  console.log('token : ', token)
   const onSubmitHandler = async () => {
     const res = axios
       .post(
@@ -66,8 +37,11 @@ function Detail() {
         alert(error.response.data.message)
       })
   }
+  const dataFetch = () => {
+    console.log('dataFetch')
+  }
   useEffect(() => {
-    console.log()
+    console.log('재랜더링')
   }, [])
   return (
     <CenterWrapperDetail>
@@ -155,7 +129,7 @@ const ContentsWrap = styled.div`
   gap: 46px;
 `
 const CommnetsWrap = styled.div`
-  margin-top: 150px;
+  margin-top: 80px;
   padding: 10px;
   border-radius: 15px;
 `

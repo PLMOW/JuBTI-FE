@@ -13,16 +13,12 @@ import axios from 'axios'
 function MainPage() {
   const location = useLocation()
   const userInfo = getUser()
-  const [isAutoModal, setAutoModal] = useState<boolean>(true)
+  const [isAutoModal, setAutoModal] = useState<boolean>(false)
   const [activePage, setPage] = useState(1)
   const [isNum, setNum] = useState<any>(null)
   const [total, setTotal] = useState<number>(0)
   const [products, setProducts] = useState<any>([])
-
-  const login = useSelector((state: any) => {
-    return state.login.login
-  })
-  console.log('login :', login)
+  const [useIsLogin, useSetLogin] = useState<any>(null)
 
   const onClickModal = () => {
     setAutoModal(true)
@@ -52,6 +48,10 @@ function MainPage() {
     ]
     setTotal(Math.ceil(data?.length / TAKE))
   }, [])
+  const login = useSelector((state: any) => {
+    return state?.login?.login
+  })
+  useEffect(() => {}, [])
   // const fetchHandler = async () => {
   //   axios.get('/api/recipe')
   //   const res = await axios
@@ -98,6 +98,10 @@ function MainPage() {
               </ElementBox>
             )
           })}
+        {login && login[0]?.login === true ? (
+          <AutoModal closeModal={setAutoModal} el={isNum} />
+        ) : null}
+
         {userInfo && isAutoModal && (
           <AutoModal closeModal={setAutoModal} el={isNum} />
         )}

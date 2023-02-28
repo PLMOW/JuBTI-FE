@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { setCookie } from '../util/cookie'
@@ -39,8 +39,6 @@ function Login() {
   const login = useSelector((state: any) => {
     return state.login.login
   })
-  console.log('login :', login)
-
   return (
     <>
       <CenterWrapper>
@@ -49,13 +47,13 @@ function Login() {
         <Input
           type="text"
           value={isId}
-          onChange={(e: any) => setId(e.target.value)}
+          onChange={useCallback((e: any) => setId(e.target.value), [])}
         />
         <Label>비밀번호</Label>
         <Input
           type="password"
           value={isPassword}
-          onChange={(e: any) => setPassword(e.target.value)}
+          onChange={useCallback((e: any) => setPassword(e.target.value), [])}
         />
         <ButtonWrap>
           <Button

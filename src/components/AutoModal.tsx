@@ -24,11 +24,13 @@ const AutoModal = (props: any) => {
             ></img>
           </div>
           <BoxMent>축하합니다 당신은 *** 주류입니다.</BoxMent>
-          주정의 생산부터 숙성에 이르기까지 전통적인 방식을 고수하고 있어
-          전통적인 느낌을 주는 위스키이다. 셰리 오크통을 사용하는 더 맥켈란과
-          달리 버번 캐스크 원액을 주로 사용하여 화려한 오크향이 특징이다. 싱글
-          몰트 위스키 특유의 강하고 쏘는 듯한 맛을 지니고 있는 위스키지만,
-          부드러운 느낌 또한 가지고 있어 상당히 대중적인 싱글 몰트 위스키이다.
+          <BoxMentContent>
+            주정의 생산부터 숙성에 이르기까지 전통적인 방식을 고수하고 있어
+            전통적인 느낌을 주는 위스키이다. 셰리 오크통을 사용하는 더 맥켈란과
+            달리 버번 캐스크 원액을 주로 사용하여 화려한 오크향이 특징이다. 싱글
+            몰트 위스키 특유의 강하고 쏘는 듯한 맛을 지니고 있는 위스키지만,
+            부드러운 느낌 또한 가지고 있어 상당히 대중적인 싱글 몰트 위스키이다.
+          </BoxMentContent>
         </ImageWrap>
         <div>
           <div style={{ textAlign: 'right' }}>
@@ -115,8 +117,8 @@ const Button = styled.button<{
   }
 `
 const BoxMent = styled.div`
-  margin: 35px 0 25px;
-  font-size: 20px;
+  margin: 35px 0 40px;
+  font-size: 23px;
   font-family: 'Pretendard-Black';
 `
 const ImageWrap = styled.div`
@@ -124,5 +126,8 @@ const ImageWrap = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
+`
+const BoxMentContent = styled.div`
+  line-height: 1.3rem;
 `
 export default AutoModal
