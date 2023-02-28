@@ -2,30 +2,61 @@ import axios from 'axios'
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
+import { getCookie } from '../util/cookie'
 import { getUser } from '../util/localstorage'
 import { Button, Input } from './Login'
+// import { Cookies } from 'react-cookie'
 
 function Detail() {
   const [isComment, setComment] = useState('')
   const data = [1]
   const userInfo = getUser()
   const params = useParams()
+  let token = getCookie('accessToken') // 쿠키에저장
+
+  // const cookie = new Cookies()
   const onSubmitHandler = async () => {
-    const res = await axios
-      .post(`http://3.36.29.101/api/recipe/${params?.id}/comment`, {
-        comments: isComment,
-      })
-      .then((res) => {
-        // res.headers.get('Authorization')
-        console.log(res)
-        // const token = res.data.headers.to
-        alert('작성완료')
-      })
-      .catch((error) => {
-        console.log(error)
-        alert(error.response.data.message)
-      })
+    const res = await axios({
+      method: 'POST',
+      url: `http://3.36.29.101/api/recipe/${params?.id}/comment`,
+      data: { comments: isComment },
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: token,
+      },
+    })
+    console.log(res)
+    // .then((res) => {
+    //   // res.headers.get('Authorization')
+    //   console.log(res)
+    //   // const token = res.data.headers.to
+    //   alert('작성완료')
+    // })
+    // .catch((error) => {
+    //   console.log(error)
+    //   alert(error.response.data.message)
+    // })
   }
+  // const onSubmitHandler = async () => {
+  //   const res = await axios
+  //     .post(
+  //       `http://3.36.29.101/api/recipe/${params?.id}/comment`,
+  //       {
+  //         comments: isComment,
+  //       },
+  //       { headers: { Authorization: `${token}` } }
+  //     )
+  //     .then((res) => {
+  //       // res.headers.get('Authorization')
+  //       console.log(res)
+  //       // const token = res.data.headers.to
+  //       alert('작성완료')
+  //     })
+  //     .catch((error) => {
+  //       console.log(error)
+  //       alert(error.response.data.message)
+  //     })
+  // }
   return (
     <CenterWrapperDetail>
       {/* <h1 style={{ fontSize: '30px', marginBottom: '10px' }}>

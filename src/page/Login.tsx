@@ -18,13 +18,14 @@ function Login() {
         password: isPassword,
       })
       .then((res) => {
-        // res.headers.get('Authorization')
         let target = res.headers.authorization
-        let token = target.split(' ')[1]
+        // res.headers.get('Authorization')
+        let token = target.split(' ')[1] //여기서 베어러 잘랐어요
         // const token = res.data.headers.to
 
+        setCookie('accessToken', res.headers.authorization) // 쿠키에저장
         setCookie('accessJwtToken', token) // 쿠키에저장
-        const decodedUserInfo = jwt_decode(token) // 토큰 decode
+        const decodedUserInfo = jwt_decode(token)
         console.log('decode', decodedUserInfo)
         localStorage.setItem('userInfo', JSON.stringify(decodedUserInfo))
         dispatch(todoUpdateLogin({ login: true }))
