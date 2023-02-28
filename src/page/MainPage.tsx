@@ -9,16 +9,15 @@ import { getUser } from '../util/localstorage'
 import { useSelector } from 'react-redux'
 import CreateBox from '../asset/svg/CreateBox'
 import axios from 'axios'
+import Heart from '../asset/svg/Heart'
 
 function MainPage() {
-  const location = useLocation()
   const userInfo = getUser()
   const [isAutoModal, setAutoModal] = useState<boolean>(false)
   const [activePage, setPage] = useState(1)
   const [isNum, setNum] = useState<any>(null)
   const [total, setTotal] = useState<number>(0)
-  const [products, setProducts] = useState<any>([])
-  const [useIsLogin, useSetLogin] = useState<any>(null)
+  const [isProducts, setProducts] = useState<any>([])
 
   const onClickModal = () => {
     setAutoModal(true)
@@ -26,48 +25,44 @@ function MainPage() {
   }
   useEffect(() => {
     const skip = TAKE * (activePage - 1)
-    let data = [
-      1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 20, 1, 2, 3,
-      4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 20, 1, 2, 3, 4, 5, 6,
-      7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 20, 1, 2, 3, 4, 5, 6, 7, 9, 10,
-      11, 12, 13, 14, 15, 16, 17, 19, 20, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12,
-      13, 14, 15, 16, 17, 19, 20, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14,
-      15, 16, 17, 19, 20,
-    ].slice(skip, skip + TAKE)
-    setProducts(data)
+    console.log(skip, skip + TAKE)
+    axios
+      // .get(`http://3.36.29.101/api/recipe`, {
+      .get(`http://3.36.29.101/api/recipe/${skip}/${skip + TAKE}`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setProducts(res.data)
+      })
+    // .slice(skip, skip + TAKE)
   }, [activePage])
 
   useEffect(() => {
-    let data = [
-      1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 20, 1, 2, 3,
-      4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 20, 1, 2, 3, 4, 5, 6,
-      7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 20, 1, 2, 3, 4, 5, 6, 7, 9, 10,
-      11, 12, 13, 14, 15, 16, 17, 19, 20, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12,
-      13, 14, 15, 16, 17, 19, 20, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14,
-      15, 16, 17, 19, 20,
-    ]
-    setTotal(Math.ceil(data?.length / TAKE))
-  }, [])
+    axios
+      // .get(`http://3.36.29.101/api/recipe`, {
+      .get(`http://3.36.29.101/api/recipe`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setTotal(Math.ceil(res.data?.length / TAKE))
+      })
+  }, [isProducts])
   const login = useSelector((state: any) => {
     return state?.login?.login
   })
-  useEffect(() => {}, [])
   // const fetchHandler = async () => {
-  //   axios.get('/api/recipe')
   //   const res = await axios
   //     .get(`http://3.36.29.101/api/recipe`, {
   //       withCredentials: true,
   //     })
   //     .then((res) => {
-  //       console.log(res)
+  //       console.log(res.data)
+  //       setProducts(res.data)
   //     })
   //     .catch((error) => {
   //       console.log(error)
   //     })
   // }
-  // useEffect(() => {
-  //   fetchHandler()
-  // }, [])
   return (
     <div style={{ marginTop: '150px' }}>
       <CotentWrap>
@@ -84,16 +79,44 @@ function MainPage() {
             내Mbti확인하기
           </Button>
         </ButtonWrap>
-        {products &&
-          products?.map((el: number, idx: number) => {
+        {isProducts &&
+          isProducts?.map((el: any, idx: number) => {
             return (
-              <ElementBox key={idx}>
-                <Link to={`/detail/${el}`} state={el}>
+              <ElementBox key={el.id}>
+                <Link to={`/detail/${el.id}`} state={el.id}>
                   <Img
                     src="https://lesprit.kr/img_goods/1535021786.jpg"
-                    alt={`주류 ${el}`}
+                    alt={`주류 ${el.id}`}
                   />
-                  <div>술이름 {el}</div>
+                  <div
+                    style={{
+                      marginTop: '20px',
+                      fontWeight: 'bold',
+                    }}
+                  >
+                    {el.mbti}
+                  </div>
+                  <div>술이름 {el.id}</div>
+                  <div>title {el.title}</div>
+                  <div>nickname {el.nickname}</div>
+                  <div>
+                    33.33px
+                    {el.recipeLike !== null ? (
+                      el.recipeLike
+                    ) : (
+                      <>
+                        <div
+                          style={{
+                            width: '26px',
+                            display: 'flex',
+                            fontSize: '17px',
+                          }}
+                        >
+                          <Heart /> 0
+                        </div>
+                      </>
+                    )}
+                  </div>
                 </Link>
               </ElementBox>
             )
@@ -143,6 +166,7 @@ const ElementBox = styled.div`
   overflow: hidden;
   display: inline-block;
   margin-right: 33.33px;
+  padding: 10px 0px;
   &:nth-of-type(4n + 1) {
     margin-right: inherit;
   }
