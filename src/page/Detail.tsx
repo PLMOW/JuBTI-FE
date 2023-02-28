@@ -1,11 +1,98 @@
-import React from 'react'
+import axios from 'axios'
+import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
-import { Input } from './Login'
+import { getCookie } from '../util/cookie'
+import { getUser } from '../util/localstorage'
+import { Button, Input } from './Login'
+// import { Cookies } from 'react-cookie'
 
 function Detail() {
-  const prams = useParams()
-  const data = [1, 2, 3, 4, 5, 6, 7, 8]
+  const [isComment, setComment] = useState('')
+  const data = [1]
+  const userInfo = getUser()
+  const params = useParams()
+  let token = getCookie('accessToken') // 쿠키에저장
+
+  // const cookie = new Cookies()
+  // const onSubmitHandler = async () => {
+  //   console.log('token  : ', token)
+  //   console.log('params?.id  : ', params?.id)
+  //   console.log('isComment  : ', isComment)
+
+  //   // const res = await axios({
+  //   //   method: 'POST',
+  //   //   url: `http://3.36.29.101/api/recipe/${params?.id}/comment`,
+  //   //   data: { comments: isComment },
+  //   //   headers: {
+  //   //     'Content-Type': 'application/json',
+  //   //     Authorization: token,
+  //   //   },
+  //   // })
+  //   // console.log(res)
+  //   // .then((res) => {
+  //   //   // res.headers.get('Authorization')
+  //   //   console.log(res)
+  //   //   // const token = res.data.headers.to
+  //   //   alert('작성완료')
+  //   // })
+  //   // .catch((error) => {
+  //   //   console.log(error)
+  //   //   alert(error.response.data.message)
+  //   // })
+  // }
+  axios.defaults.baseURL = 'http://3.36.29.101'
+  // axios.defaults.withCredentials = true
+  console.log('token : ', token)
+  const onSubmitHandler = async () => {
+    const res = axios.post(
+      `/api/recipe/${params?.id}/comment`,
+      {
+        comments: isComment,
+      },
+      {
+        headers: {
+          Authorization: token,
+          // 'Content-Type': 'Application/JSON',
+          // 'Access-Control-Allow-Credentials': 'true',
+          // 'Access-Control-Allow-Origin': '*',
+          // 'Access-Control-Expose-Headers': '*',
+        },
+      }
+    )
+    // .then((res) => {
+    //   // res.headers.get('Authorization')
+    //   axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    //   console.log(res)
+    //   // const token = res.data.headers.to
+    //   alert('작성완료')
+    // })
+    console.log(res)
+    // const res = await axios
+    //   .post(
+    //     `/api/recipe/${params?.id}/comment`,
+    //     {
+    //       comments: isComment,
+    //     }
+    //     // {
+    //     //   headers: {
+    //     //     Authorization: `${token}`,
+    //     //     'Content-Type': 'application/json',
+    //     //   },
+    //     // }
+    //   )
+    //   .then((res) => {
+    //     // res.headers.get('Authorization')
+    //     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    //     console.log(res)
+    //     // const token = res.data.headers.to
+    //     alert('작성완료')
+    //   })
+    //   .catch((error) => {
+    //     console.log(error)
+    //     alert(error.response.data.message)
+    //   })
+  }
   return (
     <CenterWrapperDetail>
       {/* <h1 style={{ fontSize: '30px', marginBottom: '10px' }}>
@@ -24,6 +111,12 @@ function Detail() {
             >
               막걸리1사발 꿀 한큰술 둘이 섞은 다음 부어라 마신다.
             </div>
+            <a
+              href="https://api.dailyshot.co/pickup/products/6929/detail/"
+              style={{ textDecoration: 'underline', color: 'blue' }}
+            >
+              구매링크
+            </a>
           </div>
         </ContentsWrapIn>
       </ContentsWrap>
@@ -37,11 +130,34 @@ function Detail() {
         >
           Comments ({data.length})
         </CommnetsInner>
+        <div style={{ color: '#909090', fontSize: '20px' }}>id/이름/내용</div>
         {data?.map((el: number) => {
-          return <Comment key={el}>김영현 : 글렌피딕을 좋아합니다.</Comment>
+          return <Comment key={el}>1/김영현/글렌피딕을 좋아합니다.</Comment>
         })}
-        <Input width={'100px'} height={'40px'} type="text" placeholder="이름" />
-        <Input width={'250px'} height={'40px'} type="text" placeholder="내용" />
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <Input
+            width={'250px'}
+            height={'30px'}
+            fontSize={'15px'}
+            type="text"
+            placeholder="내용"
+            value={isComment}
+            onChange={(e: any) => {
+              setComment(e.target.value)
+            }}
+          />
+          <Button
+            width="70px"
+            fontWeight="600"
+            bgColor="#000"
+            border="2px solid #000"
+            color="white"
+            height="30px"
+            onClick={onSubmitHandler}
+          >
+            작성
+          </Button>
+        </div>
       </CommnetsWrap>
     </CenterWrapperDetail>
   )
@@ -95,5 +211,6 @@ const ContentTopName = styled(ContentName)`
 `
 const Comment = styled.div`
   font-size: 16px;
+  padding: 5px;
 `
 export default Detail

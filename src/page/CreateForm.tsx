@@ -19,7 +19,7 @@ function CreateForm() {
     Mbti: '',
     Material: '',
     Content: '',
-  });
+  })
 
   const onClickHandler = async(e: any) => {
     e.preventDefault();
@@ -33,17 +33,17 @@ function CreateForm() {
     if (isImage.image_file === '' ) {
       return alert('이미지를 넣어주세요.');
     }
-    if (data.Title.trim() === '' ) {
-      return alert('제목을 입력해주세요.');
+    if (data.Title.trim() === '') {
+      return alert('제목을 입력해주세요.')
     }
-    if (data.Mbti.trim() === '' ) {
-      return alert('Mbti를 입력해주세요.');
+    if (data.Mbti.trim() === '') {
+      return alert('Mbti를 입력해주세요.')
     }
-    if (data.Material.trim() === '' ) {
-      return alert('재료를 선택해주세요.');
+    if (data.Material.trim() === '') {
+      return alert('재료를 선택해주세요.')
     }
-    if (data.Content.trim() === '' ) {
-      return alert('레시피를 입력해주세요.');
+    if (data.Content.trim() === '') {
+      return alert('레시피를 입력해주세요.')
     }
 
     const formData = new FormData()
@@ -87,8 +87,6 @@ function CreateForm() {
       navigate('/createform');
     });
 
-
-
     // 데이터 내용 초기화
     setImage({
       image_file: "",
@@ -99,16 +97,14 @@ function CreateForm() {
       Mbti: '',
       Material: '',
       Content: '',
-    });
-
+    })
   }
 
-
   // 이벤트 핸들러
-  const changhandler = (e : any) => {
-    const { name, value } = e.target;
-    setData({ ...data, [name]: value });
-    
+  const changhandler = (e: any) => {
+    const { name, value } = e.target
+    setData({ ...data, [name]: value })
+
     // 엔터('\n') 개수를 세서 textareaHeight에 저장
     setTextareaHeight(e.target.value.split('\n').length - 1);
     e.preventDefault();
@@ -116,9 +112,7 @@ function CreateForm() {
 
   // ContentTextarea 컨텐츠 확장기능
   // 줄 수를 계산해서 저장할 변수
-  const [textareaHeight, setTextareaHeight] = useState(0);
-  
-  
+  const [textareaHeight, setTextareaHeight] = useState(0)
 
   // // 이미지 미리보기 저장할 변수
   // const [previewImg, setPreviewImg ] = useState<any>([]);
@@ -177,8 +171,8 @@ function CreateForm() {
           <ImgInput 
             type="file"
             multiple
-            name='Image'
-            accept='image/*'
+            name="Image"
+            accept="image/*"
             onChange={imgHandler}
             onClick={(e :any) => e.target.value = null}
             ref={refParam => inputRef = refParam}
@@ -186,22 +180,22 @@ function CreateForm() {
         </ImgForm>
         <CreateFormWrapIn>
           <TitleForm>
-            <InputBox 
+            <InputBox
               type="text"
               name="Title"
               onChange={changhandler}
-              placeholder="제목을 적어주세요!" 
+              placeholder="제목을 적어주세요!"
             />
           </TitleForm>
           <MbtiForm>
-            <InputBox 
+            <InputBox
               type="text"
               name="Mbti"
               onChange={changhandler}
               placeholder="mbti를 적어주세요!"
             />
           </MbtiForm>
-          <MaterialForm name='Material' onChange={changhandler} >
+          <MaterialForm name="Material" onChange={changhandler}>
             <option value="" hidden>
               주 재료를골라주세요!
             </option>
@@ -213,26 +207,22 @@ function CreateForm() {
           </MaterialForm>
         </CreateFormWrapIn>
         <ContentForm>
-          <ContentTextarea 
-            name='Content'
+          <ContentTextarea
+            name="Content"
             placeholder="당신의 레시피를 적어주세요!"
             onChange={changhandler}
-            style={{height: ((textareaHeight + 2) * 18) + 'px'}}   
+            style={{ height: (textareaHeight + 2) * 18 + 'px' }}
           />
         </ContentForm>
         <SaveButtonContainer>
-          <Button
-            bgColor="#000"
-            border="3px solid #fff"
-            color="white"
-          >
+          <Button bgColor="#000" border="3px solid #fff" color="white">
             저장
           </Button>
           <Button
             bgColor="#fff"
             border="3px solid black"
             onClick={() => {
-              navigate('/mainpage');
+              navigate('/mainpage')
             }}
           >
             취소
@@ -240,7 +230,7 @@ function CreateForm() {
         </SaveButtonContainer>
       </Forms>
     </CreateWrapper>
-  )  
+  )
 }
 
 const CreateWrapper = styled.div`
@@ -259,7 +249,7 @@ const ImgForm = styled.label`
   cursor: pointer;
 `
 const Img = styled.img`
-width: 400px;
+  width: 400px;
   height: 400px;
 `
 const ImgInput = styled.input`
@@ -270,7 +260,7 @@ const Forms = styled.form`
   gap: 50px;
   justify-content: center;
   display: grid;
-	grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, 1fr);
 `
 const CreateFormWrapIn = styled.div`
   display: flex;
@@ -311,15 +301,14 @@ const MaterialForm = styled.select`
   margin: 20px 0px;
   padding-left: 10px;
   margin: 20px 5px;
-
 `
 const ContentForm = styled.div`
-  border-Top: 1px solid #e0e0e0;
+  border-top: 1px solid #e0e0e0;
   padding: 20px 0px;
   font-family: none;
   font-weight: initial;
   display: grid;
-	grid-column-end: span 2;
+  grid-column-end: span 2;
 `
 const ContentTextarea = styled.textarea`
   width: 100%;
