@@ -12,6 +12,7 @@ function Detail() {
   const [isComment, setComment] = useState('')
   const userInfo = getUser()
   const params = useParams()
+  const [isData, setData] = useState<any>([])
   let token = getCookie('accessToken') // 쿠키에저장
 
   axios.defaults.baseURL = 'http://3.36.29.101'
@@ -29,19 +30,23 @@ function Detail() {
         }
       )
       .then((res) => {
-        console.log(res)
-        alert('작성완료')
+        alert(`${res.data.mag}`)
       })
       .catch((error) => {
         console.log(error)
         alert(error.response.data.message)
       })
   }
-  const dataFetch = () => {
-    console.log('dataFetch')
-  }
+
   useEffect(() => {
-    console.log('재랜더링')
+    axios
+      .get(`/api/recipe/${params?.id}`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        setData(res.data)
+        console.log(res.data)
+      })
   }, [])
   return (
     <CenterWrapperDetail>
@@ -50,23 +55,22 @@ function Detail() {
       </h1> */}
       <ContentsWrap>
         <div>
-          <Img src="https://lesprit.kr/img_goods/1535021786.jpg" alt="" />
+          <Img src={isData?.image} alt="" />
         </div>
         <ContentsWrapIn>
-          <ContentTopName>글렌피딕 18년산</ContentTopName>
+          <ContentTopName>{isData?.title}</ContentTopName>
           <div>
-            <ContentName>ENFP / 김영현</ContentName>
+            <ContentName>
+              {isData?.mbti} ({isData?.material}) / {isData?.nickname}
+            </ContentName>
             <div
-              style={{ borderTop: '1px solid #e0e0e0', padding: '20px 0px' }}
+              style={{
+                borderTop: '1px solid #e0e0e0',
+                padding: '20px 0px',
+              }}
             >
-              막걸리1사발 꿀 한큰술 둘이 섞은 다음 부어라 마신다.
+              {isData?.content}
             </div>
-            <a
-              href="https://api.dailyshot.co/pickup/products/6929/detail/"
-              style={{ textDecoration: 'underline', color: 'blue' }}
-            >
-              구매링크
-            </a>
           </div>
         </ContentsWrapIn>
       </ContentsWrap>
@@ -146,9 +150,9 @@ const CommnetsInner = styled.div`
   font-size: 20px;
 `
 const ContentName = styled.div`
-  font-family: 'Pretendard-Black';
   font-weight: bold;
   margin: 20px 0px;
+  font-size: 20px;
 `
 const ContentTopName = styled(ContentName)`
   overflow: hidden;

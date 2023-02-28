@@ -28,7 +28,8 @@ function MainPage() {
     console.log(skip, skip + TAKE)
     axios
       // .get(`http://3.36.29.101/api/recipe`, {
-      .get(`http://3.36.29.101/api/recipe/${skip}/${skip + TAKE}`, {
+      .get(`http://3.36.29.101/api/recipe`, {
+        // .get(`http://3.36.29.101/api/recipe/${skip}/${skip + TAKE}`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -39,7 +40,6 @@ function MainPage() {
 
   useEffect(() => {
     axios
-      // .get(`http://3.36.29.101/api/recipe`, {
       .get(`http://3.36.29.101/api/recipe`, {
         withCredentials: true,
       })
@@ -84,10 +84,7 @@ function MainPage() {
             return (
               <ElementBox key={el.id}>
                 <Link to={`/detail/${el.id}`} state={el.id}>
-                  <Img
-                    src="https://lesprit.kr/img_goods/1535021786.jpg"
-                    alt={`주류 ${el.id}`}
-                  />
+                  <Img src={el.image} alt={`주류 ${el.id}`} />
                   <div
                     style={{
                       marginTop: '20px',
