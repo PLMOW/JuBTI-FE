@@ -15,48 +15,84 @@ function Detail() {
   let token = getCookie('accessToken') // 쿠키에저장
 
   // const cookie = new Cookies()
+  // const onSubmitHandler = async () => {
+  //   console.log('token  : ', token)
+  //   console.log('params?.id  : ', params?.id)
+  //   console.log('isComment  : ', isComment)
+
+  //   // const res = await axios({
+  //   //   method: 'POST',
+  //   //   url: `http://3.36.29.101/api/recipe/${params?.id}/comment`,
+  //   //   data: { comments: isComment },
+  //   //   headers: {
+  //   //     'Content-Type': 'application/json',
+  //   //     Authorization: token,
+  //   //   },
+  //   // })
+  //   // console.log(res)
+  //   // .then((res) => {
+  //   //   // res.headers.get('Authorization')
+  //   //   console.log(res)
+  //   //   // const token = res.data.headers.to
+  //   //   alert('작성완료')
+  //   // })
+  //   // .catch((error) => {
+  //   //   console.log(error)
+  //   //   alert(error.response.data.message)
+  //   // })
+  // }
+  axios.defaults.baseURL = 'http://3.36.29.101'
+  // axios.defaults.withCredentials = true
+  console.log('token : ', token)
   const onSubmitHandler = async () => {
-    const res = await axios({
-      method: 'POST',
-      url: `http://3.36.29.101/api/recipe/${params?.id}/comment`,
-      data: { comments: isComment },
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: token,
+    const res = axios.post(
+      `/api/recipe/${params?.id}/comment`,
+      {
+        comments: isComment,
       },
-    })
-    console.log(res)
+      {
+        headers: {
+          Authorization: token,
+          // 'Content-Type': 'Application/JSON',
+          // 'Access-Control-Allow-Credentials': 'true',
+          // 'Access-Control-Allow-Origin': '*',
+          // 'Access-Control-Expose-Headers': '*',
+        },
+      }
+    )
     // .then((res) => {
     //   // res.headers.get('Authorization')
+    //   axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
     //   console.log(res)
     //   // const token = res.data.headers.to
     //   alert('작성완료')
     // })
-    // .catch((error) => {
-    //   console.log(error)
-    //   alert(error.response.data.message)
-    // })
+    console.log(res)
+    // const res = await axios
+    //   .post(
+    //     `/api/recipe/${params?.id}/comment`,
+    //     {
+    //       comments: isComment,
+    //     }
+    //     // {
+    //     //   headers: {
+    //     //     Authorization: `${token}`,
+    //     //     'Content-Type': 'application/json',
+    //     //   },
+    //     // }
+    //   )
+    //   .then((res) => {
+    //     // res.headers.get('Authorization')
+    //     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    //     console.log(res)
+    //     // const token = res.data.headers.to
+    //     alert('작성완료')
+    //   })
+    //   .catch((error) => {
+    //     console.log(error)
+    //     alert(error.response.data.message)
+    //   })
   }
-  // const onSubmitHandler = async () => {
-  //   const res = await axios
-  //     .post(
-  //       `http://3.36.29.101/api/recipe/${params?.id}/comment`,
-  //       {
-  //         comments: isComment,
-  //       },
-  //       { headers: { Authorization: `${token}` } }
-  //     )
-  //     .then((res) => {
-  //       // res.headers.get('Authorization')
-  //       console.log(res)
-  //       // const token = res.data.headers.to
-  //       alert('작성완료')
-  //     })
-  //     .catch((error) => {
-  //       console.log(error)
-  //       alert(error.response.data.message)
-  //     })
-  // }
   return (
     <CenterWrapperDetail>
       {/* <h1 style={{ fontSize: '30px', marginBottom: '10px' }}>

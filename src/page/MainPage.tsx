@@ -52,22 +52,22 @@ function MainPage() {
     ]
     setTotal(Math.ceil(data?.length / TAKE))
   }, [])
-  const fetchHandler = async () => {
-    axios.get('/api/recipe')
-    const res = await axios
-      .get(`http://3.36.29.101/api/recipe`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        console.log(res)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  }
-  useEffect(() => {
-    fetchHandler()
-  }, [])
+  // const fetchHandler = async () => {
+  //   axios.get('/api/recipe')
+  //   const res = await axios
+  //     .get(`http://3.36.29.101/api/recipe`, {
+  //       withCredentials: true,
+  //     })
+  //     .then((res) => {
+  //       console.log(res)
+  //     })
+  //     .catch((error) => {
+  //       console.log(error)
+  //     })
+  // }
+  // useEffect(() => {
+  //   fetchHandler()
+  // }, [])
   return (
     <div style={{ marginTop: '150px' }}>
       <CotentWrap>
