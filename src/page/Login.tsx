@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { setCookie } from '../util/cookie'
@@ -18,10 +18,9 @@ function Login() {
         password: isPassword,
       })
       .then((res) => {
+        console.log(res)
         let target = res.headers.authorization
-        // res.headers.get('Authorization')
         let token = target.split(' ')[1] //여기서 베어러 잘랐어요
-        // const token = res.data.headers.to
 
         setCookie('accessToken', res.headers.authorization) // 쿠키에저장
         const decodedUserInfo = jwt_decode(token)
@@ -39,8 +38,6 @@ function Login() {
   const login = useSelector((state: any) => {
     return state.login.login
   })
-  console.log('login :', login)
-
   return (
     <>
       <CenterWrapper>
@@ -49,13 +46,13 @@ function Login() {
         <Input
           type="text"
           value={isId}
-          onChange={(e: any) => setId(e.target.value)}
+          onChange={useCallback((e: any) => setId(e.target.value), [])}
         />
         <Label>비밀번호</Label>
         <Input
           type="password"
           value={isPassword}
-          onChange={(e: any) => setPassword(e.target.value)}
+          onChange={useCallback((e: any) => setPassword(e.target.value), [])}
         />
         <ButtonWrap>
           <Button

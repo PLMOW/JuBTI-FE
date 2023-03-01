@@ -1,51 +1,48 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
+import ChatBox from '../asset/svg/ChatBox'
+import Heart from '../asset/svg/Heart'
+import Modify from '../asset/svg/Modify'
+import Xmark from '../asset/svg/Xmark'
 import { getCookie } from '../util/cookie'
 import { getUser } from '../util/localstorage'
 import { Button, Input } from './Login'
 // import { Cookies } from 'react-cookie'
 
 function Detail() {
-  const data = [1]
   const [isComment, setComment] = useState('')
   const userInfo = getUser()
   const params = useParams()
+  const [isData, setData] = useState<any>([])
+  const [isHearts, setHearts] = useState(false)
   let token = getCookie('accessToken') // 쿠키에저장
 
-  // const cookie = new Cookies()
-  // const onSubmitHandler = async () => {
-  //   console.log('token  : ', token)
-  //   console.log('params?.id  : ', params?.id)
-  //   console.log('isComment  : ', isComment)
-
-  //   // const res = await axios({
-  //   //   method: 'POST',
-  //   //   url: `http://3.36.29.101/api/recipe/${params?.id}/comment`,
-  //   //   data: { comments: isComment },
-  //   //   headers: {
-  //   //     'Content-Type': 'application/json',
-  //   //     Authorization: token,
-  //   //   },
-  //   // })
-  //   // console.log(res)
-  //   // .then((res) => {
-  //   //   // res.headers.get('Authorization')
-  //   //   console.log(res)
-  //   //   // const token = res.data.headers.to
-  //   //   alert('작성완료')
-  //   // })
-  //   // .catch((error) => {
-  //   //   console.log(error)
-  //   //   alert(error.response.data.message)
-  //   // })
-  // }
   axios.defaults.baseURL = 'http://3.36.29.101'
-  // axios.defaults.withCredentials = true
-  console.log('token : ', token)
+  const LikeHandlerBtn = useCallback(() => {
+    axios
+      .post(
+        `/api/recipe/${params?.id}`,
+        {},
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      )
+      .then((res) => {
+        if (res.data.msg === '좋아요') {
+          setHearts((prev) => !prev)
+        }
+      })
+  }, [])
+
+  useEffect(() => {
+    LikeHandlerBtn()
+  }, [LikeHandlerBtn])
   const onSubmitHandler = async () => {
-    const res = axios
+    const res = await axios
       .post(
         `/api/recipe/${params?.id}/comment`,
         {
@@ -58,16 +55,44 @@ function Detail() {
         }
       )
       .then((res) => {
-        console.log(res)
-        alert('작성완료')
+        alert(`${res.data.mag}`)
       })
       .catch((error) => {
         console.log(error)
         alert(error.response.data.message)
       })
   }
+  const ModifyHandler = async (commentId: any) => {
+    console.log(commentId)
+    if (window.confirm('수정하시겠습니까?')) {
+    }
+  }
+  const DeleteHandler = async (commentId: any) => {
+    console.log(commentId)
+    if (window.confirm('삭제하시겠습니까?')) {
+      await axios
+        .delete(`/api/recipe/comment/${commentId}`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then((res) => {
+          console.log(res.data)
+          alert('삭제완료')
+        })
+    }
+  }
   useEffect(() => {
-    console.log()
+    axios
+      .get(`/api/recipe/${params?.id}`, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then((res) => {
+        setData(res.data)
+        console.log(res.data)
+      })
   }, [])
   return (
     <CenterWrapperDetail>
@@ -76,41 +101,88 @@ function Detail() {
       </h1> */}
       <ContentsWrap>
         <div>
-          <Img src="https://lesprit.kr/img_goods/1535021786.jpg" alt="" />
+          <Img src={isData?.image} alt="" />
         </div>
         <ContentsWrapIn>
-          <ContentTopName>글렌피딕 18년산</ContentTopName>
+          <ContentTopName>{isData?.title}</ContentTopName>
           <div>
-            <ContentName>ENFP / 김영현</ContentName>
+            <ContentName>
+              {isData?.mbti} ({isData?.material}) / {isData?.nickname}
+            </ContentName>
             <div
-              style={{ borderTop: '1px solid #e0e0e0', padding: '20px 0px' }}
+              style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                marginBottom: '15px',
+              }}
             >
-              막걸리1사발 꿀 한큰술 둘이 섞은 다음 부어라 마신다.
+              <span>Like</span>
+              <span
+                style={{ width: '20px', display: 'flex', cursor: 'pointer' }}
+                onClick={LikeHandlerBtn}
+              >
+                {isHearts ? <>♡</> : <>♥</>}
+              </span>{' '}
+              :{'  '}
+              {isData.recipeLike}
             </div>
-            <a
-              href="https://api.dailyshot.co/pickup/products/6929/detail/"
-              style={{ textDecoration: 'underline', color: 'blue' }}
+
+            <div
+              style={{
+                borderTop: '1px solid #e0e0e0',
+                padding: '20px 0px',
+              }}
             >
-              구매링크
-            </a>
+              {isData?.content}
+            </div>
           </div>
         </ContentsWrapIn>
       </ContentsWrap>
       <CommnetsWrap>
         <CommnetsInner
           style={{
-            marginBottom: '24px',
+            marginBottom: '20 px',
             paddingBottom: '8px',
             borderBottom: '1px solid #e0e0e0',
           }}
         >
-          Comments ({data.length})
+          Comments ({isData?.comments?.length})
         </CommnetsInner>
-        <div style={{ color: '#909090', fontSize: '20px' }}>id/이름/내용</div>
-        {data?.map((el: number) => {
-          return <Comment key={el}>1/김영현/글렌피딕을 좋아합니다.</Comment>
-        })}
-        <div style={{ display: 'flex', gap: '8px' }}>
+        {isData &&
+          isData?.comments?.map((el: any) => {
+            return (
+              <Comment key={el.id}>
+                {el.user}님
+                <span style={{ width: '25px', display: 'inline-block' }}>
+                  <ChatBox />
+                </span>
+                : {el.comments}
+                <span
+                  style={{
+                    marginLeft: '10px',
+                    width: '20px',
+                    display: 'inline-block',
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => DeleteHandler(el.id)}
+                >
+                  <Xmark />
+                </span>
+                <span
+                  style={{
+                    marginLeft: '3px',
+                    width: '15px',
+                    display: 'inline-block',
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => ModifyHandler(el.id)}
+                >
+                  {el.user == userInfo.sub ? <Modify /> : <>nomodify</>}
+                </span>
+              </Comment>
+            )
+          })}
+        <div style={{ display: 'flex', gap: '8px', marginTop: '30px' }}>
           <Input
             width={'250px'}
             height={'30px'}
@@ -155,7 +227,7 @@ const ContentsWrap = styled.div`
   gap: 46px;
 `
 const CommnetsWrap = styled.div`
-  margin-top: 150px;
+  margin-top: 80px;
   padding: 10px;
   border-radius: 15px;
 `
@@ -172,9 +244,9 @@ const CommnetsInner = styled.div`
   font-size: 20px;
 `
 const ContentName = styled.div`
-  font-family: 'Pretendard-Black';
   font-weight: bold;
   margin: 20px 0px;
+  font-size: 20px;
 `
 const ContentTopName = styled(ContentName)`
   overflow: hidden;
@@ -187,6 +259,8 @@ const ContentTopName = styled(ContentName)`
 `
 const Comment = styled.div`
   font-size: 16px;
-  padding: 5px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
 `
 export default Detail
