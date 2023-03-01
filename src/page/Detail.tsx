@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import ChatBox from '../asset/svg/ChatBox'
 import Heart from '../asset/svg/Heart'
+import Modify from '../asset/svg/Modify'
 import Xmark from '../asset/svg/Xmark'
 import { getCookie } from '../util/cookie'
 import { getUser } from '../util/localstorage'
@@ -61,6 +62,11 @@ function Detail() {
         alert(error.response.data.message)
       })
   }
+  const ModifyHandler = async (commentId: any) => {
+    console.log(commentId)
+    if (window.confirm('수정하시겠습니까?')) {
+    }
+  }
   const DeleteHandler = async (commentId: any) => {
     console.log(commentId)
     if (window.confirm('삭제하시겠습니까?')) {
@@ -79,7 +85,9 @@ function Detail() {
   useEffect(() => {
     axios
       .get(`/api/recipe/${params?.id}`, {
-        withCredentials: true,
+        headers: {
+          Authorization: token,
+        },
       })
       .then((res) => {
         setData(res.data)
@@ -152,13 +160,24 @@ function Detail() {
                 <span
                   style={{
                     marginLeft: '10px',
-                    width: '25px',
+                    width: '20px',
                     display: 'inline-block',
                     cursor: 'pointer',
                   }}
                   onClick={() => DeleteHandler(el.id)}
                 >
                   <Xmark />
+                </span>
+                <span
+                  style={{
+                    marginLeft: '3px',
+                    width: '15px',
+                    display: 'inline-block',
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => ModifyHandler(el.id)}
+                >
+                  {el.user == userInfo.sub ? <Modify /> : <>nomodify</>}
                 </span>
               </Comment>
             )

@@ -54,17 +54,19 @@ function MainPage() {
     <div style={{ marginTop: '150px' }}>
       <CotentWrap>
         <ButtonWrap>
-          <Button
-            width="150px"
-            fontWeight="600"
-            bgColor="#000"
-            border="3px solid #fff"
-            color="white"
-            height="50px"
-            onClick={() => onClickModal()}
-          >
-            내Mbti확인하기
-          </Button>
+          {userInfo && userInfo ? (
+            <Button
+              width="150px"
+              fontWeight="600"
+              bgColor="#000"
+              border="3px solid #fff"
+              color="white"
+              height="50px"
+              onClick={() => onClickModal()}
+            >
+              내Mbti확인하기
+            </Button>
+          ) : null}
         </ButtonWrap>
         {isProducts &&
           isProducts?.map((el: any, idx: number) => {
