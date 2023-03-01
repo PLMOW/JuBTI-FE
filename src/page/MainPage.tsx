@@ -15,7 +15,7 @@ function MainPage() {
   const userInfo = getUser()
   const [isAutoModal, setAutoModal] = useState<boolean>(false)
   const [activePage, setPage] = useState(1)
-  const [isNum, setNum] = useState<any>(null)
+  const [isMbti, setMbti] = useState<any>(null)
   const [total, setTotal] = useState<number>(0)
   const [isProducts, setProducts] = useState<any>([])
 
@@ -28,11 +28,11 @@ function MainPage() {
     console.log(skip, skip + TAKE)
     axios
       // .get(`http://3.36.29.101/api/recipe`, {
-      // .get(`http://3.36.29.101/api/recipe`, {
       .get(`http://3.36.29.101/api/recipe/${skip + 1}/${skip + TAKE}`, {
         withCredentials: true,
       })
       .then((res) => {
+        console.log(res.data)
         setProducts(res.data)
       })
     // .slice(skip, skip + TAKE)
@@ -106,11 +106,11 @@ function MainPage() {
             )
           })}
         {login && login[0]?.login === true ? (
-          <AutoModal closeModal={setAutoModal} el={isNum} />
+          <AutoModal closeModal={setAutoModal} mbti={'ISTJ'} />
         ) : null}
 
         {userInfo && isAutoModal && (
-          <AutoModal closeModal={setAutoModal} el={isNum} />
+          <AutoModal closeModal={setAutoModal} mbti={'ISTJ'} />
         )}
       </CotentWrap>
       <div

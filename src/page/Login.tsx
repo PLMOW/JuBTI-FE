@@ -18,10 +18,9 @@ function Login() {
         password: isPassword,
       })
       .then((res) => {
+        console.log(res)
         let target = res.headers.authorization
-        // res.headers.get('Authorization')
         let token = target.split(' ')[1] //여기서 베어러 잘랐어요
-        // const token = res.data.headers.to
 
         setCookie('accessToken', res.headers.authorization) // 쿠키에저장
         const decodedUserInfo = jwt_decode(token)
