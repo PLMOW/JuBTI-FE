@@ -123,7 +123,7 @@ function CreateForm() {
       if(files.size > fileSizeMax) {
         e.target.value = '';
         setPreviewImg('');
-        alert('업로드 가능한 최대 용량은 3MB입니다!!')
+        alert('업로드 가능한 최대 용량은 3MB입니다!!!')
         return;
       }
     }
