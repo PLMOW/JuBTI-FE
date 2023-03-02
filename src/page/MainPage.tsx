@@ -10,6 +10,7 @@ import { useSelector } from 'react-redux'
 import CreateBox from '../asset/svg/CreateBox'
 import axios from 'axios'
 import Heart from '../asset/svg/Heart'
+import { getCookie } from '../util/cookie'
 
 function MainPage() {
   const userInfo = getUser()
@@ -18,34 +19,31 @@ function MainPage() {
   const [isMbti, setMbti] = useState<any>(null)
   const [total, setTotal] = useState<number>(0)
   const [isProducts, setProducts] = useState<any>([])
-
+  const userMbti = localStorage.getItem('userMbti')
+  let token = getCookie('accessToken')
   const onClickModal = () => {
     setAutoModal(true)
     // setNum(el)
   }
   useEffect(() => {
     const skip = TAKE * (activePage - 1)
-    console.log(skip, skip + TAKE)
     axios
       // .get(`http://3.36.29.101/api/recipe`, {
       .get(`http://3.36.29.101/api/recipe/${skip + 1}/${skip + TAKE}`, {
-        withCredentials: true,
+        headers: {
+          Authorization: token,
+        },
       })
       .then((res) => {
-        console.log(res.data)
         setProducts(res.data)
       })
     // .slice(skip, skip + TAKE)
   }, [activePage])
 
   useEffect(() => {
-    axios
-      .get(`http://3.36.29.101/api/recipe`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        setTotal(Math.ceil(res.data?.length / TAKE))
-      })
+    axios.get(`http://3.36.29.101/api/recipe`, {}).then((res) => {
+      setTotal(Math.ceil(res.data?.length / TAKE))
+    })
   }, [isProducts])
   const login = useSelector((state: any) => {
     return state?.login?.login
@@ -73,46 +71,39 @@ function MainPage() {
             return (
               <ElementBox key={el.id}>
                 <Link to={`/detail/${el.id}`} state={el.id}>
-                  <Img src={el.image} alt={`주류 ${el.id}`} />
+                  <Img src={el.image[0].image} alt={`주류 ${el.id}`} />
                   <div
                     style={{
-                      marginTop: '20px',
+                      margin: '20px 0px',
                       fontWeight: 'bold',
                     }}
                   >
                     {el.mbti}
                   </div>
-                  <div>술이름 {el.id}</div>
-                  <div>title {el.title}</div>
-                  <div>nickname {el.nickname}</div>
-                  <div>
-                    33.33px
-                    {el.recipeLike !== null ? (
-                      el.recipeLike
-                    ) : (
-                      <>
-                        <div
-                          style={{
-                            width: '26px',
-                            display: 'flex',
-                            fontSize: '17px',
-                          }}
-                        >
-                          <Heart /> 0
-                        </div>
-                      </>
-                    )}
+                  <div style={{ whiteSpace: 'nowrap' }}>{el.title}</div>
+                  <div>{el.nickname}</div>
+                  <div style={{ display: 'flex', margin: '10px 0px' }}>
+                    <span
+                      style={{
+                        width: '20px',
+                        display: 'flex',
+                        fontSize: '17px',
+                      }}
+                    >
+                      {/* <Heart /> */}❤
+                    </span>
+                    {el.recipeLike}
                   </div>
                 </Link>
               </ElementBox>
             )
           })}
         {login && login[0]?.login === true ? (
-          <AutoModal closeModal={setAutoModal} mbti={'ISTJ'} />
+          <AutoModal closeModal={setAutoModal} mbti={userMbti} />
         ) : null}
 
         {userInfo && isAutoModal && (
-          <AutoModal closeModal={setAutoModal} mbti={'ISTJ'} />
+          <AutoModal closeModal={setAutoModal} mbti={userMbti} />
         )}
       </CotentWrap>
       <div
@@ -139,7 +130,7 @@ const Img = styled.img`
   object-fit: cover;
 `
 const CotentWrap = styled.div`
-  width: 948px;
+  width: 1030px;
   margin: 0 auto;
   height: auto;
 `
@@ -149,10 +140,13 @@ const ButtonWrap = styled.div`
   justify-content: end;
 `
 const ElementBox = styled.div`
+  width: 240px;
   overflow: hidden;
   display: inline-block;
-  margin-right: 33.33px;
+  margin-right: 22.33px;
   padding: 10px 0px;
+  font-size: 20px;
+  font-family: 'KCC-DodamdodamR';
   &:nth-of-type(4n + 1) {
     margin-right: inherit;
   }

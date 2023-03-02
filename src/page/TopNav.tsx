@@ -3,9 +3,11 @@ import { Outlet, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { getUser, removeUser } from '../util/localstorage'
 import '../index.css'
+import { useMutation, useQuery, useQueryClient } from 'react-query'
 import { Link } from 'react-router-dom'
 const TopNav = ({ children, user }: any) => {
   const userInfo = getUser()
+  const queryClient = useQueryClient()
 
   const navigate = useNavigate()
   const logoutHandler = () => {
@@ -33,10 +35,8 @@ const TopNav = ({ children, user }: any) => {
               </Link>
             </div>
             <InNav>
-              <h4>
-                <B>{userInfo.sub}</B>님 반갑습니다 😃
-              </h4>
-              <Button onClick={logoutHandler}>로그아웃</Button>
+              <B>Hello ! {userInfo.sub}</B> 😃
+              <Button onClick={logoutHandler}>Logout</Button>
             </InNav>
           </InNavWrap>
         ) : (
@@ -51,8 +51,8 @@ const TopNav = ({ children, user }: any) => {
               </Link>
             </div>
             <InNav>
-              <Button onClick={() => navigate('/login')}>로그인</Button>
-              <Button onClick={() => navigate('/join')}>회원가입</Button>
+              <Button onClick={() => navigate('/login')}>Login</Button>
+              <Button onClick={() => navigate('/join')}>Join</Button>
             </InNav>
           </InNavWrap>
         )}
@@ -76,11 +76,14 @@ const InNavWrap = styled.div`
 `
 const Button = styled.button`
   color: black;
-  font-family: 'LINESeedKR-Bd';
-  font-size: 14px;
+  font-family: 'InkLipquid';
+  font-weight: bold;
+  font-size: 19px;
 `
 const InNav = styled.div`
+  font-family: 'KCC-DodamdodamR';
   display: flex;
+  align-items: center;
   gap: 10px;
 `
 const B = styled.b`

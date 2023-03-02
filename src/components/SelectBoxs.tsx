@@ -44,7 +44,7 @@ const SelectBoxs = ({
   )
 }
 const SelectBox = styled.div<{ ref: any }>`
-  margin-bottom: 80px;
+  margin-bottom: 10px;
   position: relative;
   width: 100%;
   height: 50px;

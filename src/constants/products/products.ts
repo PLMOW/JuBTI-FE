@@ -1,1 +1,1 @@
-export const TAKE = 4
+export const TAKE = 8
