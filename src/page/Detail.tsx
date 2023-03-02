@@ -253,7 +253,14 @@ function Detail() {
           </CommnetsWrap>
         </>
       ) : (
-        <>{navigate('/detail/:id')}</>
+        <div
+          style={{
+            fontSize: '40px',
+            fontFamily: 'KCC-DodamdodamR',
+          }}
+        >
+          해당 페이지는 로그인이 권한이 필요합니다.
+        </div>
       )}
     </CenterWrapperDetail>
   )
@@ -300,7 +307,6 @@ const ContentName = styled.div`
 const ContentTopName = styled(ContentName)`
   font-family: 'KCC-DodamdodamR';
   overflow: hidden;
-  margin-bottom: 57px;
   font-size: 35px;
   font-weight: 800;
   color: #222222;

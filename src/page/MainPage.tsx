@@ -35,6 +35,7 @@ function MainPage() {
         },
       })
       .then((res) => {
+        // console.log(res.data)
         setProducts(res.data)
       })
     // .slice(skip, skip + TAKE)
@@ -49,7 +50,7 @@ function MainPage() {
     return state?.login?.login
   })
   return (
-    <div style={{ marginTop: '150px' }}>
+    <div style={{ marginTop: '30px' }}>
       <CotentWrap>
         <ButtonWrap>
           {userInfo && userInfo ? (
@@ -110,7 +111,7 @@ function MainPage() {
         style={{
           marginTop: '5px',
           width: '100%',
-          height: '300px',
+          height: '100px',
           display: 'flex',
           justifyContent: 'center',
         }}
