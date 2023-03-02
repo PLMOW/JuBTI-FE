@@ -12,12 +12,23 @@ function Join() {
   const [isSelectData, selectData] = useState('')
   const navigate = useNavigate()
   const JoinHandler = async () => {
+    // 비밀번호 : 특수문자 1~8까지 대소문자 숫자 8~15자리
+    let idRegExp = /^[a-z0-9]{4,10}$/
+    if (!idRegExp.test(isId))
+      return alert('ID를 숫자와 소문자 4~10자리로 입력해주세요')
+
     if (isId === '' || isNickName === '')
       return alert('아이디, 이름을 입력해주세요.')
     if (isPassword === '' || isPasswordCheck === '')
       return alert('비밀번호를 입력해주세요.')
     if (isPassword !== isPasswordCheck)
       return alert('패스워드가 일치하지 않습니다.')
+    let pwRegExp = /[!@#$%^&*A-Za-z0-9]{8,15}/
+    if (!pwRegExp.test(isPassword)) {
+      return alert(
+        'PW를 특수문자 1~8까지 대소문자 숫자 8~15자리로 입력해주세요.'
+      )
+    }
     if (isSelectData === '') return alert('MBTI를 선택해주세요.')
     const body = {
       username: isId,
@@ -25,7 +36,7 @@ function Join() {
       password: isPassword,
       mbti: isSelectData,
     }
-    console.log(body)
+    console.log(isId.length)
     axios
       .post(`http://3.36.29.101/api/auth/signup`, body, {})
       .then((res) => {
