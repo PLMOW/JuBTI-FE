@@ -10,101 +10,86 @@ function CreateForm() {
   const dispatch = useDispatch()
   let inputRef;
   let token = getCookie('accessToken') // 쿠키에저장
-  const [isImage, setImage] = useState('');
+  const [formData, setFormData] = useState<any>(new FormData());
   const [previewImg, setPreviewImg ] = useState('');
   const [data, setData] = useState({
     title: '',
     mbti: '',
     material: '',
     content: '',
-    imageUrl: '',
   })
 
-  const onClickHandler = async(e: any) => {
+  const onClickHandler = async (e: any) => {
     e.preventDefault();
+    if (formData === '' ) return alert('이미지를 넣어주세요.');
+    if (data.title.trim() === '') return alert('제목을 입력해주세요.');
+    if (data.mbti.trim() === '') return alert('Mbti를 입력해주세요.');  
+    if (data.material.trim() === '') return alert('재료를 선택해주세요.');
+    if (data.content.trim() === '') return alert('레시피를 입력해주세요.');
+  
+    const {title, mbti, material, content} = data;
+    const body = JSON.stringify({title, mbti, material, content});  
+    formData.append('data', new Blob([body], {type: "application/json"}));
 
-    console.log(isImage);
-    console.log(data.title);
-    console.log(data.mbti);
-    console.log(data.material);
-    console.log(data.content);
-    console.log(data.imageUrl);
 
-    if (isImage === '' ) {
-      return alert('이미지를 넣어주세요.');
-    }
-    if (data.title.trim() === '') {
-      return alert('제목을 입력해주세요.')
-    }
-    if (data.mbti.trim() === '') {
-      return alert('Mbti를 입력해주세요.')
-    }
-    if (data.material.trim() === '') {
-      return alert('재료를 선택해주세요.')
-    }
-    if (data.content.trim() === '') {
-      return alert('레시피를 입력해주세요.')
-    }
-
-    const formData = new FormData()
-    formData.append('image', isImage);
-
-    const body = [{
-      title: data.title,
-      mbti: data.mbti,
-      material: data.material,
-      content: data.content,
-      // image: data.imageUrl,
-    }]
-    console.log(body);
-
-    formData.append("data", new Blob([JSON.stringify(body)], {type: "application/json"}))
-    
-    for (let key of formData.keys()) {
-      console.log(key, ":", formData.get(key));
-    }
-    console.log('token : ', token)
+    for (let i of formData.entries()) console.log('key', i);
     
     // axios 활용 서버에 전송 하기
-    const res = axios
-      .post(
-        // `http://3.36.29.101/api/recipe`
-        `http://3.36.29.101/api/recipe`, formData
-        // {
-        //   title: data.title,
-        //   mbti: data.mbti,
-        //   material: data.material,
-        //   content: data.content,
-        //   image: data.imageUrl,
-        // }
-        ,
-        {
-          headers: {
-            Authorization: token,
-            contentType : "multipart/form-data"
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res)
-        navigate('/detail/:id')
-        alert('작성완료')
-      })
-      .catch((error) => {
-        console.log(error)
-        alert(error.response.data.message)
-      })
+    const res = await axios({
+      method: "POST",
+      url: "http://3.36.29.101/api/recipe",
+      data: formData,
+      headers: {
+        Authorization: token,
+        'Content-Type' : "multipart/form-data"
+      },
+    }).then((res) => {
+      console.log(res)
+      navigate('/detail/:id')
+      alert('작성완료')
+    })
+    .catch((error) => {
+      console.log(error)
+      alert(error.response.data.message)
+    })
+  
+
+    console.log('target :', res);
+           
+
+    // const res = axios
+    //   .post(
+    //     `http://3.36.29.101/api/recipe`, image ,
+    //     {
+    //       headers: {
+    //         Authorization: token,
+    //         'Content-Type' : "multipart/form-data"
+    //       },
+    //     }
+    //   )
+    //   .then((res) => {
+    //     console.log(res)
+    //     navigate('/detail/:id')
+    //     alert('작성완료')
+    //   })
+    //   .catch((error) => {
+    //     console.log(error)
+    //     alert(error.response.data.message)
+    //   })
 
     // 데이터 내용 초기화
-    setImage('');
+    setFormData(new FormData());
     setData({
       title: '',
       mbti: '',
       material: '',
       content: '',
-      imageUrl: '',
-    })
+    });
+    setPreviewImg('');
   }
+
+  // ContentTextarea 컨텐츠 확장기능(줄 수를 계산해서 저장할 변수)
+  const [textareaHeight, setTextareaHeight] = useState(0)
 
   // 이벤트 핸들러
   const changhandler = (e: any) => {
@@ -115,20 +100,20 @@ function CreateForm() {
     setTextareaHeight(e.target.value.split('\n').length - 1);
     e.preventDefault();
   };
-  // ContentTextarea 컨텐츠 확장기능(줄 수를 계산해서 저장할 변수)
-  const [textareaHeight, setTextareaHeight] = useState(0)
+  
 
   
 
   // 이미지 업로드 및 미리보기
-  const imgHandler = (e : any) => {
-    if(e.target.files[0]){
-      // 새로운 이미지를 올리면 createObjectURL()을 통해 생성한 기존 URL을 폐기
-      URL.revokeObjectURL(previewImg);
-      const preview_image = URL.createObjectURL(e.target.files[0]);
-      setImage(e.target.files[0]);
-      setPreviewImg(preview_image);
+  const imgHandler = async (e : any) => {
+    const {target: {files}} = e;
+    console.log(e.target.files[0])
+    if(!files[0]) return;
+    for (let i = 0; i < files.length; i++) {
+      formData.append('image', files[i]);
     }
+    const objectURL = URL.createObjectURL(e.target.files[0])
+    setPreviewImg(objectURL);
   };
 
   useEffect(()=> {
@@ -146,7 +131,6 @@ function CreateForm() {
           <Img  
             alt="이미지 들어가는 곳"
             src={previewImg} 
-            // src={data.imageUrl}
           /> 
           <ImgInput 
             type="file"
@@ -156,10 +140,6 @@ function CreateForm() {
             onChange={imgHandler}
             onClick={(e :any) => e.target.value = null}
             ref={refParam => inputRef = refParam}
-
-            // type="text"
-            // name="imageUrl"
-            // onChange={changhandler}
           />
         </ImgForm>
         <CreateFormWrapIn>
