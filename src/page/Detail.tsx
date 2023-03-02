@@ -33,17 +33,17 @@ function Detail() {
         }
       )
       .then((res) => {
-        if (res.data.msg === '좋아요') {
-          setHearts((prev) => !prev)
-        }
+        console.log(res)
+        setHearts((prev) => !prev)
       })
+    // window.location.reload()
   }, [])
-
-  useEffect(() => {
-    LikeHandlerBtn()
-  }, [LikeHandlerBtn])
-  const onSubmitHandler = async () => {
-    const res = await axios
+  const onSubmitHandler = () => {
+    if (isComment === '') {
+      alert('무엇이든 입력하세요')
+      return
+    }
+    const res = axios
       .post(
         `/api/recipe/${params?.id}/comment`,
         {
@@ -56,11 +56,13 @@ function Detail() {
         }
       )
       .then((res) => {
-        alert(`${res.data.mag}`)
+        console.log(res.data.msg)
+        alert(`${res.data.msg}`)
+        window.location.reload()
       })
       .catch((error) => {
         console.log(error)
-        alert(error.response.data.message)
+        alert(error)
       })
   }
   const ModifyHandler = async (commentId: any) => {
@@ -80,9 +82,11 @@ function Detail() {
         .then((res) => {
           console.log(res.data)
           alert('삭제완료')
+          window.location.reload()
         })
     }
   }
+
   useEffect(() => {
     axios
       .get(`/api/recipe/${params?.id}`, {
@@ -96,7 +100,6 @@ function Detail() {
         setData(setImagData)
       })
   }, [])
-  console.log('isData : ', isData)
   return (
     <CenterWrapperDetail>
       {/* <h1 style={{ fontSize: '30px', marginBottom: '10px' }}>
@@ -194,7 +197,7 @@ function Detail() {
                 >
                   <Xmark />
                 </span>
-                <span
+                {/* <span
                   style={{
                     marginLeft: '3px',
                     width: '15px',
@@ -204,7 +207,7 @@ function Detail() {
                   onClick={() => ModifyHandler(el.id)}
                 >
                   {el.user == userInfo.sub ? <Modify /> : <>nomodify</>}
-                </span>
+                </span> */}
               </Comment>
             )
           })}

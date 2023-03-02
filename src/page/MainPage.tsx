@@ -151,6 +151,8 @@ const ElementBox = styled.div`
   display: inline-block;
   margin-right: 33.33px;
   padding: 10px 0px;
+  font-size: 20px;
+  font-family: 'KCC-DodamdodamR';
   &:nth-of-type(4n + 1) {
     margin-right: inherit;
   }

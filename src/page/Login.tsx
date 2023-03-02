@@ -106,14 +106,15 @@ export const CenterWrapper = styled.div`
 `
 export const Label = styled.div`
   margin: 17px 0px 10px;
-
   font-size: 20px;
   font-weight: bold;
+  font-family: 'KCC-DodamdodamR';
 `
 export const H1 = styled.div`
   font-weight: bold;
   text-align: center;
   font-size: 25px;
+  font-family: 'KCC-DodamdodamR';
 `
 export const Input = styled.input<any>`
   width: ${(props) => (props.width ? props.width : '100%')};
@@ -144,9 +145,9 @@ export const Button = styled.button<{
   color: ${({ color }) => (color ? color : '#000')};
   height: ${(props) => (props.height ? props.height : '45px')};
   padding: 1px 6px;
-
+  font-size: 17px;
   font-weight: ${(props) => (props.fontWeight ? props.fontWeight : null)};
-  font-family: 'LINESeedKR-Bd';
+  font-family: 'KCC-DodamdodamR';
   width: ${(props) => (props.width ? props.width : '110px')};
   &:active {
     filter: brightness(50%);
