@@ -60,8 +60,8 @@ function CreateForm() {
       },
     }).then((res) => {
       console.log(res)
-      navigate('/detail/:id')
       alert('작성완료')
+      navigate('/mainpage')
     })
     .catch((error) => {
       console.log(error)
