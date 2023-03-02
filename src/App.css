@@ -34,3 +34,17 @@
   font-weight: 400;
   font-style: normal;
 }
+
+.slider-control-bottomcenter button {
+  background: black !important;
+  border-radius: 50%;
+  width: 10px !important;
+  height: 10px !important;
+}
+
+.slider-control-bottomcenter svg {
+  display: none !important;
+}
+.slider-control-bottomcenter li {
+  margin-right: 5px;
+}

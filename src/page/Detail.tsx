@@ -9,13 +9,14 @@ import Xmark from '../asset/svg/Xmark'
 import { getCookie } from '../util/cookie'
 import { getUser } from '../util/localstorage'
 import { Button, Input } from './Login'
+import Carousel from 'nuka-carousel/lib/carousel'
 // import { Cookies } from 'react-cookie'
 
 function Detail() {
   const [isComment, setComment] = useState('')
   const userInfo = getUser()
   const params = useParams()
-  const [isData, setData] = useState<any>([])
+  const [isData, setData] = useState<any>(false)
   const [isHearts, setHearts] = useState(false)
   let token = getCookie('accessToken') // 쿠키에저장
 
@@ -90,18 +91,43 @@ function Detail() {
         },
       })
       .then((res) => {
-        setData(res.data)
-        console.log(res.data)
+        const setImagData = res.data
+        console.log('setImagData : ', setImagData)
+        setData(setImagData)
       })
   }, [])
+  console.log('isData : ', isData)
   return (
     <CenterWrapperDetail>
       {/* <h1 style={{ fontSize: '30px', marginBottom: '10px' }}>
         {prams.id} deatail page
       </h1> */}
       <ContentsWrap>
-        <div>
-          <Img src={isData?.image} alt="" />
+        <div style={{ width: '400px' }}>
+          {isData && isData ? (
+            <Carousel
+              autoplay
+              wrapAround
+              cellAlign={'center'}
+              renderCenterLeftControls={({ previousSlide }) => (
+                <button onClick={previousSlide}>
+                  <i className="fa fa-arrow-left" />
+                </button>
+              )}
+              renderCenterRightControls={({ nextSlide }) => (
+                <button onClick={nextSlide}>
+                  <i className="fa fa-arrow-right" />
+                </button>
+              )}
+            >
+              {isData &&
+                isData?.image.map((item: any, idx: any) => (
+                  <div key={idx}>
+                    <Img src={item?.image} width={400} height={400} alt={idx} />
+                  </div>
+                ))}
+            </Carousel>
+          ) : null}
         </div>
         <ContentsWrapIn>
           <ContentTopName>{isData?.title}</ContentTopName>

@@ -26,6 +26,7 @@ function Login() {
         const decodedUserInfo = jwt_decode(token)
         console.log('decode', decodedUserInfo)
         localStorage.setItem('userInfo', JSON.stringify(decodedUserInfo))
+        localStorage.setItem('userMbti', res.data.data)
         dispatch(todoUpdateLogin({ login: true }))
         alert('로그인완료')
         navigate('/')

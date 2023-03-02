@@ -33,7 +33,8 @@ function Join() {
         navigate('/login')
       })
       .catch((error) => {
-        alert(error.response.data.msg)
+        console.log(error)
+        alert('다시시도해주시기 바랍니다.')
       })
   }
   return (
