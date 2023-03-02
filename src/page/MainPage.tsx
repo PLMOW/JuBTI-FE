@@ -74,32 +74,25 @@ function MainPage() {
                   <Img src={el.image[0].image} alt={`주류 ${el.id}`} />
                   <div
                     style={{
-                      marginTop: '20px',
+                      margin: '20px 0px',
                       fontWeight: 'bold',
                     }}
                   >
                     {el.mbti}
                   </div>
-                  <div>술이름 {el.id}</div>
-                  <div>title {el.title}</div>
-                  <div>nickname {el.nickname}</div>
-                  <div>
-                    33.33px
-                    {el.recipeLike !== null ? (
-                      el.recipeLike
-                    ) : (
-                      <>
-                        <div
-                          style={{
-                            width: '26px',
-                            display: 'flex',
-                            fontSize: '17px',
-                          }}
-                        >
-                          <Heart /> 0
-                        </div>
-                      </>
-                    )}
+                  <div style={{ whiteSpace: 'nowrap' }}>{el.title}</div>
+                  <div>{el.nickname}</div>
+                  <div style={{ display: 'flex', margin: '10px 0px' }}>
+                    <span
+                      style={{
+                        width: '20px',
+                        display: 'flex',
+                        fontSize: '17px',
+                      }}
+                    >
+                      {/* <Heart /> */}❤
+                    </span>
+                    {el.recipeLike}
                   </div>
                 </Link>
               </ElementBox>
@@ -137,7 +130,7 @@ const Img = styled.img`
   object-fit: cover;
 `
 const CotentWrap = styled.div`
-  width: 948px;
+  width: 1030px;
   margin: 0 auto;
   height: auto;
 `
@@ -147,9 +140,10 @@ const ButtonWrap = styled.div`
   justify-content: end;
 `
 const ElementBox = styled.div`
+  width: 240px;
   overflow: hidden;
   display: inline-block;
-  margin-right: 33.33px;
+  margin-right: 22.33px;
   padding: 10px 0px;
   font-size: 20px;
   font-family: 'KCC-DodamdodamR';
